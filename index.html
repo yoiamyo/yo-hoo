@@ -946,6 +946,41 @@
       tip.classList.remove('show');
     });
 
+    // Touch drag for marquee
+    const mTrack = document.getElementById('marquee');
+    let mTouchStartX = 0;
+    let mDragStartX = 0;
+    let mDragging = false;
+
+    mTrack.addEventListener('touchstart', e => {
+      mTouchStartX = e.touches[0].clientX;
+      const mat = new DOMMatrix(getComputedStyle(mTrack).transform);
+      mDragStartX = mat.m41;
+      mTrack.style.animation = 'none';
+      mTrack.style.transform = `translateX(${mDragStartX}px)`;
+      mDragging = true;
+    }, { passive: true });
+
+    mTrack.addEventListener('touchmove', e => {
+      if (!mDragging) return;
+      const dx = e.touches[0].clientX - mTouchStartX;
+      mTrack.style.transform = `translateX(${mDragStartX + dx}px)`;
+    }, { passive: true });
+
+    mTrack.addEventListener('touchend', () => {
+      if (!mDragging) return;
+      mDragging = false;
+      const mat = new DOMMatrix(getComputedStyle(mTrack).transform);
+      let x = mat.m41;
+      const half = mTrack.scrollWidth / 2;
+      // Normalise to [-half, 0]
+      while (x > 0) x -= half;
+      while (x < -half) x += half;
+      const frac = x / -half;
+      mTrack.style.transform = '';
+      mTrack.style.animation = `marquee 30s linear ${-(frac * 30)}s infinite`;
+    }, { passive: true });
+
     // Carousel with categories
     const allReels = [
       { url: 'https://www.instagram.com/reel/DXbxvEPk6Qi/', cat: '創作者' },
