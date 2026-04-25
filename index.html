@@ -239,6 +239,90 @@
       line-height: 1.8;
     }
 
+    /* ── SOCIAL ── */
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .social-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .social-card:hover { border-color: #444; background: #161616; }
+
+    .social-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #1a1a1a;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .social-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 10px;
+    }
+
+    .social-avatar span {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dim);
+    }
+
+    .social-handle {
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .social-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--dim);
+      width: fit-content;
+    }
+
+    .social-cta {
+      margin-top: auto;
+      font-size: 0.68rem;
+      color: var(--dim);
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+
+    .social-card:hover .social-cta { color: var(--text); }
+
+    @media (max-width: 768px) {
+      .social-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    }
+
     /* ── CLIENTS ── */
     #clients { overflow: hidden; }
 
@@ -835,6 +919,58 @@
     <button class="lb-close" id="lb-close">✕</button>
     <iframe id="lb-frame" src="" allowfullscreen></iframe>
   </div>
+
+  <!-- SOCIAL -->
+  <section id="social">
+    <p class="s-label fi">Social Media</p>
+    <div class="social-grid">
+
+      <a class="social-card fi" href="https://www.instagram.com/thekingofnightmarket/" target="_blank" rel="noopener">
+        <div class="social-avatar">
+          <img src="assets/logos/YSW.png" alt="夜市王">
+        </div>
+        <div>
+          <div class="social-handle">@thekingofnightmarket</div>
+        </div>
+        <div class="social-tag">社群企劃</div>
+        <div class="social-cta">View on Instagram →</div>
+      </a>
+
+      <a class="social-card fi" href="https://www.instagram.com/myschedule_ltd/" target="_blank" rel="noopener">
+        <div class="social-avatar">
+          <img src="assets/logos/MY.png" alt="我的檔期">
+        </div>
+        <div>
+          <div class="social-handle">@myschedule_ltd</div>
+        </div>
+        <div class="social-tag">社群企劃</div>
+        <div class="social-cta">View on Instagram →</div>
+      </a>
+
+      <a class="social-card fi" href="https://www.instagram.com/eclatduteint_tw/" target="_blank" rel="noopener">
+        <div class="social-avatar">
+          <span>É</span>
+        </div>
+        <div>
+          <div class="social-handle">@eclatduteint_tw</div>
+        </div>
+        <div class="social-tag">品牌行銷</div>
+        <div class="social-cta">View on Instagram →</div>
+      </a>
+
+      <a class="social-card fi" href="https://www.instagram.com/mygopen/" target="_blank" rel="noopener">
+        <div class="social-avatar">
+          <img src="assets/logos/MGP.png" alt="Mygopen">
+        </div>
+        <div>
+          <div class="social-handle">@mygopen</div>
+        </div>
+        <div class="social-tag">品牌行銷</div>
+        <div class="social-cta">View on Instagram →</div>
+      </a>
+
+    </div>
+  </section>
 
   <!-- CLIENTS -->
   <section id="clients">
