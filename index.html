@@ -376,13 +376,28 @@
       pointer-events: none;
     }
 
-    .c-card[data-pos="0"]::after {
-      content: '';
+    .c-thumb {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.04), transparent 70%);
-      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
+
+    .c-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      transition: background 0.3s;
+    }
+
+    .c-card[data-pos="0"]:hover .c-overlay { background: rgba(0,0,0,0.45); }
 
     .c-num {
       position: absolute;
@@ -390,13 +405,14 @@
       left: 1.25rem;
       font-size: 0.6rem;
       letter-spacing: 0.2em;
-      color: var(--dim);
+      color: rgba(255,255,255,0.7);
+      z-index: 1;
     }
 
     .play-btn {
       width: 52px;
       height: 52px;
-      border: 1.5px solid rgba(235,235,235,0.3);
+      border: 1.5px solid rgba(255,255,255,0.6);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -405,26 +421,32 @@
     }
 
     .c-card[data-pos="0"]:hover .play-btn {
-      border-color: rgba(235,235,235,0.9);
-      background: rgba(255,255,255,0.05);
+      border-color: #fff;
+      background: rgba(255,255,255,0.15);
       transform: scale(1.12);
     }
 
     .play-btn svg {
-      fill: rgba(235,235,235,0.5);
+      fill: rgba(255,255,255,0.8);
       width: 16px;
       height: 16px;
       margin-left: 3px;
     }
 
-    .c-card[data-pos="0"]:hover .play-btn svg { fill: var(--text); }
+    .c-card[data-pos="0"]:hover .play-btn svg { fill: #fff; }
 
     .c-label {
       font-size: 0.6rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--dim);
+      color: rgba(255,255,255,0.7);
     }
+
+    /* fallback when no thumbnail */
+    .c-card.no-thumb .c-overlay { background: transparent; }
+    .c-card.no-thumb .play-btn { border-color: rgba(235,235,235,0.3); }
+    .c-card.no-thumb .play-btn svg { fill: rgba(235,235,235,0.5); }
+    .c-card.no-thumb .c-label { color: var(--dim); }
 
     .carousel-nav {
       display: flex;
@@ -939,15 +961,22 @@
 
     function renderCarousel() {
       const filtered = getFiltered();
-      carousel.innerHTML = filtered.map((r, i) => `
+      carousel.innerHTML = filtered.map((r, i) => {
+        const code = r.url.match(/\/(reel|p)\/([^/?]+)/)?.[2] || '';
+        return `
         <div class="c-card" data-url="${r.url}" data-idx="${i}">
           <span class="c-num">${String(i+1).padStart(2,'0')}</span>
-          <div class="play-btn">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <img class="c-thumb" src="assets/thumbnails/${code}.jpg"
+               onerror="this.closest('.c-card').classList.add('no-thumb');this.style.display='none'">
+          <div class="c-overlay">
+            <div class="play-btn">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span class="c-label">Watch Reel</span>
           </div>
-          <span class="c-label">Watch Reel</span>
         </div>
-      `).join('');
+        `;
+      }).join('');
       updateCarousel();
     }
 
