@@ -904,15 +904,15 @@
 
     function closeLightbox() {
       if (!lbOpen) return;
-      lbContent.style.opacity = '0';
       lbContent.style.transition = 'opacity 0.25s';
+      lbContent.style.opacity = '0';
       lbBg.classList.remove('open');
       setTimeout(() => {
-        lbContent.classList.remove('expanded');
-        lbContent.style.opacity = '';
-        lbContent.style.transition = '';
+        lbContent.style.transition = 'none';
+        lbContent.style.opacity = '1';
         lbContent.style.width = '0';
         lbContent.style.height = '0';
+        lbContent.classList.remove('expanded');
         lbFrame.src = '';
         lbOpen = false;
       }, 280);
