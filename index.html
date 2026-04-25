@@ -1094,6 +1094,22 @@
       updateCarousel();
     });
 
+    // Touch swipe support
+    let touchStartX = 0;
+    carousel.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    carousel.addEventListener('touchend', e => {
+      const delta = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(delta) < 40) return;
+      if (delta > 0) {
+        activeIdx = (activeIdx + 1) % currentFiltered.length;
+      } else {
+        activeIdx = (activeIdx - 1 + currentFiltered.length) % currentFiltered.length;
+      }
+      updateCarousel();
+    }, { passive: true });
+
     carousel.addEventListener('click', e => {
       const card = e.target.closest('.c-card');
       if (!card) return;
