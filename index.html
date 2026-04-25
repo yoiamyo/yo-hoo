@@ -995,8 +995,6 @@
       if (!btn) return;
       activeFilter = btn.dataset.cat;
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === activeFilter));
-      const filtered = getFiltered();
-      activeIdx = featuredIdx(filtered, activeFilter);
       renderCarousel();
     });
 
@@ -1004,14 +1002,38 @@
       return activeFilter === '全部' ? allReels : allReels.filter(r => r.cat === activeFilter);
     }
 
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    let currentFiltered = [];
+
     function renderCarousel() {
-      const filtered = getFiltered();
-      carousel.innerHTML = filtered.map((r, i) => {
-        const code = r.url.match(/\/(reel|p)\/([^/?]+)/)?.[2] || '';
+      const shuffled = shuffle(getFiltered());
+      // Place featured card at center
+      const code = featuredCode[activeFilter];
+      if (code) {
+        const fi = shuffled.findIndex(r => r.url.includes(code));
+        if (fi > 0) { // swap to front so activeIdx=0 centres it... actually set activeIdx to fi
+        activeIdx = fi;
+        } else {
+          activeIdx = 0;
+        }
+      } else {
+        activeIdx = Math.floor(Math.random() * shuffled.length);
+      }
+      currentFiltered = shuffled;
+      carousel.innerHTML = shuffled.map((r, i) => {
+        const c = r.url.match(/\/(reel|p)\/([^/?]+)/)?.[2] || '';
         return `
         <div class="c-card" data-url="${r.url}" data-idx="${i}">
           <span class="c-num">${String(i+1).padStart(2,'0')}</span>
-          <img class="c-thumb" src="assets/thumbnails/${code}.jpg"
+          <img class="c-thumb" src="assets/thumbnails/${c}.jpg"
                onerror="this.closest('.c-card').classList.add('no-thumb');this.style.display='none'">
           <div class="c-overlay">
             <div class="play-btn">
@@ -1025,12 +1047,10 @@
     }
 
     function updateCarousel() {
-      const filtered = getFiltered();
-      const len = filtered.length;
+      const len = currentFiltered.length;
       document.querySelectorAll('.c-card').forEach(card => {
         const idx = parseInt(card.dataset.idx);
         let pos = idx - activeIdx;
-        // Wrap to shortest arc
         if (pos >  Math.floor(len / 2)) pos -= len;
         if (pos < -Math.floor(len / 2)) pos += len;
         card.dataset.pos = pos;
@@ -1040,13 +1060,12 @@
     renderCarousel();
 
     document.getElementById('c-prev').addEventListener('click', () => {
-      const len = getFiltered().length;
-      activeIdx = (activeIdx - 1 + len) % len;
+      activeIdx = (activeIdx - 1 + currentFiltered.length) % currentFiltered.length;
       updateCarousel();
     });
 
     document.getElementById('c-next').addEventListener('click', () => {
-      activeIdx = (activeIdx + 1) % getFiltered().length;
+      activeIdx = (activeIdx + 1) % currentFiltered.length;
       updateCarousel();
     });
 
