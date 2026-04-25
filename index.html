@@ -914,7 +914,12 @@
       }
       lbContent.classList.remove('expanded');
       lbBg.classList.remove('open');
-      setTimeout(() => { lbFrame.src = ''; lbOpen = false; }, 480);
+      setTimeout(() => {
+        lbFrame.src = '';
+        lbContent.style.width = '0';
+        lbContent.style.height = '0';
+        lbOpen = false;
+      }, 480);
     }
 
     document.getElementById('lb-close').addEventListener('click', closeLightbox);
