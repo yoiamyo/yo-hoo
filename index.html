@@ -422,56 +422,72 @@
     .c-btn:hover { color: var(--text); border-color: #444; }
 
     /* ── LIGHTBOX ── */
-    .lightbox {
+    .lb-bg {
       position: fixed;
       inset: 0;
+      z-index: 499;
+      background: rgba(0,0,0,0.85);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+    }
+
+    .lb-bg.open {
+      opacity: 1;
+      pointer-events: all;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .lb-content {
+      position: fixed;
       z-index: 500;
-      background: rgba(0,0,0,0.88);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #0e0e0e;
+      pointer-events: none;
+      transition: top 0.48s cubic-bezier(0.25,0.46,0.45,0.94),
+                  left 0.48s cubic-bezier(0.25,0.46,0.45,0.94),
+                  width 0.48s cubic-bezier(0.25,0.46,0.45,0.94),
+                  height 0.48s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+    .lb-content.expanded { pointer-events: all; }
+
+    .lb-content iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      opacity: 0;
+      transition: opacity 0.25s 0.3s;
+    }
+
+    .lb-content.expanded iframe { opacity: 1; }
+
+    .lb-close {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      z-index: 10;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(235,235,235,0.8);
+      font-size: 0.7rem;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s;
-      backdrop-filter: blur(6px);
+      transition: opacity 0.25s 0.35s, background 0.2s;
     }
 
-    .lightbox.open {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .lb-inner {
-      position: relative;
-      width: min(360px, 88vw);
-      aspect-ratio: 9 / 16;
-      max-height: 85vh;
-    }
-
-    .lb-inner iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 8px;
-    }
-
-    .lb-close {
-      position: absolute;
-      top: -2.2rem;
-      right: 0;
-      background: none;
-      border: none;
-      color: rgba(235,235,235,0.6);
-      font-family: var(--font);
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
-    .lb-close:hover { color: var(--text); }
+    .lb-content.expanded .lb-close { opacity: 1; }
+    .lb-close:hover { background: rgba(0,0,0,0.9); color: #fff; }
 
     /* ── CONTACT ── */
     #contact { border-top: 1px solid var(--border); }
@@ -712,11 +728,10 @@
   </section>
 
   <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox">
-    <div class="lb-inner">
-      <button class="lb-close" id="lb-close">✕ Close</button>
-      <iframe id="lb-frame" src="" allowfullscreen></iframe>
-    </div>
+  <div class="lb-bg" id="lb-bg"></div>
+  <div class="lb-content" id="lb-content">
+    <button class="lb-close" id="lb-close">✕</button>
+    <iframe id="lb-frame" src="" allowfullscreen></iframe>
   </div>
 
   <!-- CONTACT -->
@@ -847,23 +862,64 @@
         return;
       }
       // Active card → open lightbox
-      const url = card.dataset.url;
-      const code = url.match(/reel\/([^/?]+)/)?.[1];
-      if (!code) return;
-      document.getElementById('lb-frame').src = `https://www.instagram.com/p/${code}/embed/`;
-      document.getElementById('lightbox').classList.add('open');
+      openLightbox(card, card.dataset.url);
     });
 
-    // Lightbox close
-    const lightbox = document.getElementById('lightbox');
-    document.getElementById('lb-close').addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+    // Lightbox (expand from card)
+    const lbBg = document.getElementById('lb-bg');
+    const lbContent = document.getElementById('lb-content');
+    const lbFrame = document.getElementById('lb-frame');
+    let lbOpen = false;
+
+    function openLightbox(card, url) {
+      if (lbOpen) return;
+      lbOpen = true;
+      const code = url.match(/reel\/([^/?]+)/)?.[1];
+      if (!code) return;
+
+      // Start at card's exact position
+      const r = card.getBoundingClientRect();
+      lbContent.style.transition = 'none';
+      lbContent.style.top = r.top + 'px';
+      lbContent.style.left = r.left + 'px';
+      lbContent.style.width = r.width + 'px';
+      lbContent.style.height = r.height + 'px';
+
+      lbBg.classList.add('open');
+      lbContent.offsetHeight; // force reflow
+
+      // Animate to center
+      lbContent.style.transition = '';
+      const tw = Math.min(360, window.innerWidth * 0.88);
+      const th = Math.min(tw * 16 / 9, window.innerHeight * 0.88);
+      const tw2 = th * 9 / 16;
+      lbContent.style.top  = ((window.innerHeight - th) / 2) + 'px';
+      lbContent.style.left = ((window.innerWidth - tw2) / 2) + 'px';
+      lbContent.style.width  = tw2 + 'px';
+      lbContent.style.height = th + 'px';
+      lbContent.classList.add('expanded');
+
+      setTimeout(() => { lbFrame.src = `https://www.instagram.com/p/${code}/embed/`; }, 250);
+    }
 
     function closeLightbox() {
-      lightbox.classList.remove('open');
-      setTimeout(() => { document.getElementById('lb-frame').src = ''; }, 350);
+      if (!lbOpen) return;
+      const activeCard = document.querySelector('.c-card[data-pos="0"]');
+      if (activeCard) {
+        const r = activeCard.getBoundingClientRect();
+        lbContent.style.top  = r.top + 'px';
+        lbContent.style.left = r.left + 'px';
+        lbContent.style.width  = r.width + 'px';
+        lbContent.style.height = r.height + 'px';
+      }
+      lbContent.classList.remove('expanded');
+      lbBg.classList.remove('open');
+      setTimeout(() => { lbFrame.src = ''; lbOpen = false; }, 480);
     }
+
+    document.getElementById('lb-close').addEventListener('click', closeLightbox);
+    lbBg.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
     // Keyboard arrow navigation
     document.addEventListener('keydown', e => {
