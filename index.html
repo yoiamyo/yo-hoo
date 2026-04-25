@@ -945,6 +945,9 @@
     document.getElementById('marquee').addEventListener('mouseleave', () => {
       tip.classList.remove('show');
     });
+    document.getElementById('marquee').addEventListener('touchstart', () => {
+      tip.classList.remove('show');
+    }, { passive: true });
 
     // Touch drag for marquee
     const mTrack = document.getElementById('marquee');
