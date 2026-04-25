@@ -915,7 +915,7 @@
 
     const cats = ['全部', '藝人', '品牌', '節目', '創作者', '戲劇', '活動'];
     let activeFilter = '全部';
-    let activeIdx = 0;
+    let activeIdx = Math.floor(Math.random() * allReels.length);
     const carousel = document.getElementById('carousel');
 
     // Build tabs
