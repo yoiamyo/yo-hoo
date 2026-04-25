@@ -285,6 +285,34 @@
       to   { transform: translateX(-50%); }
     }
 
+    /* ── WORK TABS ── */
+    .work-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 0.6rem 1.2rem;
+      font-family: var(--font);
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+      cursor: pointer;
+      margin-bottom: -1px;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
+
     /* ── CAROUSEL ── */
     #work { overflow: hidden; }
 
@@ -720,6 +748,7 @@
   <!-- WORK -->
   <section id="work">
     <p class="s-label fi">Selected Works</p>
+    <div class="work-tabs fi" id="work-tabs"></div>
     <div class="carousel-stage fi" id="carousel"></div>
     <div class="carousel-nav fi">
       <button class="c-btn" id="c-prev">← Prev</button>
@@ -806,52 +835,136 @@
       `<span class="cl-item">${c}</span><span class="cl-sep">&nbsp;/&nbsp;</span>`
     ).join('');
 
-    // Carousel
-    const reels = [
-      'https://www.instagram.com/reel/DQW3msWCRcD/',
-      'https://www.instagram.com/reel/DQYnrl_gVJV/',
-      'https://www.instagram.com/reel/DQRk9keE1WB/',
-      'https://www.instagram.com/reel/DO5oBzogZag/',
-      'https://www.instagram.com/reel/DPBWbEAk_JV/',
-      'https://www.instagram.com/reel/DINi-5RxLSu/',
-      'https://www.instagram.com/reel/DHioPCZSFhb/',
-      'https://www.instagram.com/reel/DH5lrlIh9mE/',
+    // Carousel with categories
+    const allReels = [
+      { url: 'https://www.instagram.com/reel/DXbxvEPk6Qi/', cat: '創作者' },
+      { url: 'https://www.instagram.com/reel/DXRiN_sjKCb/', cat: '創作者' },
+      { url: 'https://www.instagram.com/reel/DXME3SiJAJ6/', cat: '戲劇' },
+      { url: 'https://www.instagram.com/reel/DWYc7OkCb3L/', cat: '創作者' },
+      { url: 'https://www.instagram.com/reel/DWOXgZvp_7W/', cat: '戲劇' },
+      { url: 'https://www.instagram.com/reel/DWGiUhMS5b0/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/DVvv0IwiRrz/', cat: '戲劇' },
+      { url: 'https://www.instagram.com/reel/DVpkaA1EysG/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DVifINrifOJ/', cat: '戲劇' },
+      { url: 'https://www.instagram.com/reel/DVf5-_UCedF/', cat: '戲劇' },
+      { url: 'https://www.instagram.com/reel/DVdbKtZAbG7/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DV-z86vCTb2/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DUvTrFtEcR_/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DUezSHQgVcs/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DUX8d7sga2r/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DTPInongYU5/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DShlVnrAZsL/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DSPyY8mAc6y/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DSEZlYtlgFK/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DRwka62AY4M/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DRt5itYgYA6/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DRedoDsiSFM/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DRKRsM_gZoa/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DQbpK6FCTr0/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DQW3msWCRcD/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DQYnrl_gVJV/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DQRk9keE1WB/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DQHDJHdk1Ea/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DQEWJwhE0gl/', cat: '創作者' },
+      { url: 'https://www.instagram.com/reel/DP0X8kukruF/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/DPeAQHBAZBk/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DPBWbEAk_JV/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DO5oBzogZag/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DOJDdRZCQBu/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DMZ-rlhBsrm/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DLzaez_R5BR/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/DLtXEp5yflD/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/DLnRbbQyNbU/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/DLc35eXSOzb/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DLcuUojSCVI/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DLctQXEydNS/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DLcjUj2y9M4/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DKmHzGQhFR_/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DJwQCPMTt5H/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DHTLMQ_zU1M/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DHIVr9ps50P/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DHioPCZSFhb/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DH5lrlIh9mE/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/DGAj_xRzX6-/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DGAEzZJzEzA/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DINi-5RxLSu/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DE37O0hBIcz/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/DEq866VBhWs/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/DEpc1LZhVUa/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/C62sSGsvqgY/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/C6c7_zgvmut/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/C6NlGYsvKrF/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/C4cHY6CPRSv/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/CtIk4XEpiSm/', cat: '藝人' },
+      { url: 'https://www.instagram.com/p/DGkclnghgmD/',   cat: '節目' },
+      { url: 'https://www.instagram.com/p/DFpZIiDBvbl/',   cat: '節目' },
+      { url: 'https://www.instagram.com/p/CzjGr5oSe9d/',   cat: '節目' },
+      { url: 'https://www.instagram.com/p/CzFte1Hy6np/',   cat: '節目' },
+      { url: 'https://www.instagram.com/p/CzV2PgmSGU0/',   cat: '節目' },
+      { url: 'https://www.instagram.com/p/CykPJTVr6T6/',   cat: '節目' },
+      { url: 'https://www.instagram.com/p/CdvEkG3sgYG/',   cat: '創作者' },
+      { url: 'https://www.instagram.com/p/Ct-siespHms/',   cat: '藝人' },
     ];
 
+    const cats = ['全部', '藝人', '品牌', '節目', '創作者', '戲劇', '活動'];
+    let activeFilter = '全部';
     let activeIdx = 0;
     const carousel = document.getElementById('carousel');
 
-    carousel.innerHTML = reels.map((url, i) => `
-      <div class="c-card" data-url="${url}" data-idx="${i}">
-        <span class="c-num">0${i+1}</span>
-        <div class="play-btn">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    // Build tabs
+    const tabsEl = document.getElementById('work-tabs');
+    tabsEl.innerHTML = cats.map(c =>
+      `<button class="tab-btn${c === activeFilter ? ' active' : ''}" data-cat="${c}">${c}</button>`
+    ).join('');
+
+    tabsEl.addEventListener('click', e => {
+      const btn = e.target.closest('.tab-btn');
+      if (!btn) return;
+      activeFilter = btn.dataset.cat;
+      activeIdx = 0;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === activeFilter));
+      renderCarousel();
+    });
+
+    function getFiltered() {
+      return activeFilter === '全部' ? allReels : allReels.filter(r => r.cat === activeFilter);
+    }
+
+    function renderCarousel() {
+      const filtered = getFiltered();
+      carousel.innerHTML = filtered.map((r, i) => `
+        <div class="c-card" data-url="${r.url}" data-idx="${i}">
+          <span class="c-num">${String(i+1).padStart(2,'0')}</span>
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="c-label">Watch Reel</span>
         </div>
-        <span class="c-label">Watch Reel</span>
-      </div>
-    `).join('');
+      `).join('');
+      updateCarousel();
+    }
 
     function updateCarousel() {
+      const filtered = getFiltered();
       document.querySelectorAll('.c-card').forEach(card => {
         const idx = parseInt(card.dataset.idx);
-        const pos = idx - activeIdx;
-        card.dataset.pos = pos;
+        card.dataset.pos = idx - activeIdx;
       });
     }
 
-    updateCarousel();
+    renderCarousel();
 
     document.getElementById('c-prev').addEventListener('click', () => {
-      activeIdx = (activeIdx - 1 + reels.length) % reels.length;
+      const len = getFiltered().length;
+      activeIdx = (activeIdx - 1 + len) % len;
       updateCarousel();
     });
 
     document.getElementById('c-next').addEventListener('click', () => {
-      activeIdx = (activeIdx + 1) % reels.length;
+      activeIdx = (activeIdx + 1) % getFiltered().length;
       updateCarousel();
     });
 
-    // Click side cards to navigate
     carousel.addEventListener('click', e => {
       const card = e.target.closest('.c-card');
       if (!card) return;
@@ -861,7 +974,6 @@
         updateCarousel();
         return;
       }
-      // Active card → open lightbox
       openLightbox(card, card.dataset.url);
     });
 

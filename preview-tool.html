@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>作品預覽工具</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { display: flex; height: 100vh; font-family: system-ui, sans-serif; background: #111; color: #eee; overflow: hidden; }
+
+  /* Sidebar */
+  #sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #222;
+    overflow: hidden;
+  }
+
+  #sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid #222;
+    font-size: 0.75rem;
+    color: #888;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  #list {
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #1a1a1a;
+    transition: background 0.15s;
+    font-size: 0.8rem;
+  }
+
+  .item:hover { background: #1a1a1a; }
+  .item.active { background: #1e1e1e; border-left: 2px solid #fff; }
+
+  .item-num {
+    color: #444;
+    font-size: 0.7rem;
+    width: 22px;
+    flex-shrink: 0;
+  }
+
+  .item-tag {
+    margin-left: auto;
+    font-size: 0.6rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  /* Main area */
+  #main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #toolbar {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid #222;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  #toolbar span {
+    font-size: 0.72rem;
+    color: #666;
+    margin-right: 0.5rem;
+  }
+
+  .cat-btn {
+    padding: 0.35rem 0.9rem;
+    border: 1px solid #333;
+    background: transparent;
+    color: #aaa;
+    font-size: 0.7rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+
+  .cat-btn:hover { border-color: #666; color: #eee; }
+  .cat-btn.active-cat { color: #111; }
+
+  #nav-btns {
+    margin-left: auto;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .nav-btn {
+    padding: 0.35rem 0.9rem;
+    border: 1px solid #333;
+    background: transparent;
+    color: #888;
+    font-size: 0.7rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .nav-btn:hover { border-color: #666; color: #eee; }
+
+  #embed-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #0d0d0d;
+  }
+
+  #embed-area iframe {
+    width: 340px;
+    height: 600px;
+    border: none;
+    border-radius: 6px;
+  }
+
+  /* Result panel */
+  #result-panel {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid #222;
+    background: #0d0d0d;
+  }
+
+  #result-panel textarea {
+    width: 100%;
+    height: 70px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    color: #aaa;
+    font-size: 0.7rem;
+    padding: 0.5rem;
+    resize: none;
+    border-radius: 3px;
+    font-family: monospace;
+  }
+
+  #result-panel .row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  #result-panel .row span {
+    font-size: 0.7rem;
+    color: #666;
+  }
+
+  .copy-btn {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid #333;
+    background: transparent;
+    color: #888;
+    font-size: 0.65rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover { border-color: #555; color: #eee; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div id="sidebar-header">67 支影片 ／ 點選預覽</div>
+  <div id="list"></div>
+</div>
+
+<div id="main">
+  <div id="toolbar">
+    <span>分類：</span>
+    <!-- 先放空白分類，你可以改名 -->
+  </div>
+  <div id="embed-area">
+    <iframe id="frame" src="" allowfullscreen></iframe>
+  </div>
+  <div id="result-panel">
+    <div class="row">
+      <span>分類結果（可複製給 Claude）</span>
+      <button class="copy-btn" onclick="copyResult()">複製</button>
+      <button class="copy-btn" onclick="clearAll()">清除</button>
+    </div>
+    <textarea id="result-output" readonly placeholder="還沒有分類結果..."></textarea>
+  </div>
+</div>
+
+<script>
+const reels = [
+  'https://www.instagram.com/reel/DXbxvEPk6Qi/',
+  'https://www.instagram.com/reel/DXRiN_sjKCb/',
+  'https://www.instagram.com/reel/DXME3SiJAJ6/',
+  'https://www.instagram.com/reel/DWYc7OkCb3L/',
+  'https://www.instagram.com/reel/DWOXgZvp_7W/',
+  'https://www.instagram.com/reel/DWGiUhMS5b0/',
+  'https://www.instagram.com/reel/DVvv0IwiRrz/',
+  'https://www.instagram.com/reel/DVpkaA1EysG/',
+  'https://www.instagram.com/reel/DVifINrifOJ/',
+  'https://www.instagram.com/reel/DVf5-_UCedF/',
+  'https://www.instagram.com/reel/DVdbKtZAbG7/',
+  'https://www.instagram.com/reel/DV-z86vCTb2/',
+  'https://www.instagram.com/reel/DUvTrFtEcR_/',
+  'https://www.instagram.com/reel/DUezSHQgVcs/',
+  'https://www.instagram.com/reel/DUX8d7sga2r/',
+  'https://www.instagram.com/reel/DTPInongYU5/',
+  'https://www.instagram.com/reel/DShlVnrAZsL/',
+  'https://www.instagram.com/reel/DSPyY8mAc6y/',
+  'https://www.instagram.com/reel/DSEZlYtlgFK/',
+  'https://www.instagram.com/reel/DRwka62AY4M/',
+  'https://www.instagram.com/reel/DRt5itYgYA6/',
+  'https://www.instagram.com/reel/DRedoDsiSFM/',
+  'https://www.instagram.com/reel/DRKRsM_gZoa/',
+  'https://www.instagram.com/reel/DQbpK6FCTr0/',
+  'https://www.instagram.com/reel/DQW3msWCRcD/',
+  'https://www.instagram.com/reel/DQYnrl_gVJV/',
+  'https://www.instagram.com/reel/DQRk9keE1WB/',
+  'https://www.instagram.com/reel/DQHDJHdk1Ea/',
+  'https://www.instagram.com/reel/DQEWJwhE0gl/',
+  'https://www.instagram.com/reel/DP0X8kukruF/',
+  'https://www.instagram.com/reel/DPeAQHBAZBk/',
+  'https://www.instagram.com/reel/DPBWbEAk_JV/',
+  'https://www.instagram.com/reel/DO5oBzogZag/',
+  'https://www.instagram.com/reel/DOJDdRZCQBu/',
+  'https://www.instagram.com/reel/DMZ-rlhBsrm/',
+  'https://www.instagram.com/reel/DLzaez_R5BR/',
+  'https://www.instagram.com/reel/DLtXEp5yflD/',
+  'https://www.instagram.com/reel/DLnRbbQyNbU/',
+  'https://www.instagram.com/reel/DLc35eXSOzb/',
+  'https://www.instagram.com/reel/DLcuUojSCVI/',
+  'https://www.instagram.com/reel/DLctQXEydNS/',
+  'https://www.instagram.com/reel/DLcjUj2y9M4/',
+  'https://www.instagram.com/reel/DKmHzGQhFR_/',
+  'https://www.instagram.com/reel/DJwQCPMTt5H/',
+  'https://www.instagram.com/reel/DHTLMQ_zU1M/',
+  'https://www.instagram.com/reel/DHIVr9ps50P/',
+  'https://www.instagram.com/reel/DHioPCZSFhb/',
+  'https://www.instagram.com/reel/DH5lrlIh9mE/',
+  'https://www.instagram.com/reel/DGAj_xRzX6-/',
+  'https://www.instagram.com/reel/DGAEzZJzEzA/',
+  'https://www.instagram.com/reel/DINi-5RxLSu/',
+  'https://www.instagram.com/reel/DE37O0hBIcz/',
+  'https://www.instagram.com/reel/DEq866VBhWs/',
+  'https://www.instagram.com/reel/DEpc1LZhVUa/',
+  'https://www.instagram.com/reel/C62sSGsvqgY/',
+  'https://www.instagram.com/reel/C6c7_zgvmut/',
+  'https://www.instagram.com/reel/C6NlGYsvKrF/',
+  'https://www.instagram.com/reel/C4cHY6CPRSv/',
+  'https://www.instagram.com/reel/CtIk4XEpiSm/',
+  'https://www.instagram.com/p/DGkclnghgmD/',
+  'https://www.instagram.com/p/DFpZIiDBvbl/',
+  'https://www.instagram.com/p/CzjGr5oSe9d/',
+  'https://www.instagram.com/p/CzFte1Hy6np/',
+  'https://www.instagram.com/p/CzV2PgmSGU0/',
+  'https://www.instagram.com/p/CykPJTVr6T6/',
+  'https://www.instagram.com/p/CdvEkG3sgYG/',
+  'https://www.instagram.com/p/Ct-siespHms/',
+];
+
+// 分類設定 — 改這裡的名稱和顏色
+const categories = [
+  { name: '藝人', color: '#7C3AED', bg: '#7C3AED' },
+  { name: '品牌', color: '#0EA5E9', bg: '#0EA5E9' },
+  { name: '節目', color: '#10B981', bg: '#10B981' },
+  { name: '創作者', color: '#F97316', bg: '#F97316' },
+  { name: '戲劇', color: '#EC4899', bg: '#EC4899' },
+  { name: '活動', color: '#14B8A6', bg: '#14B8A6' },
+  { name: '其他', color: '#F59E0B', bg: '#F59E0B' },
+];
+
+const tags = {}; // { index: categoryName }
+let current = 0;
+
+// Build sidebar
+const list = document.getElementById('list');
+reels.forEach((url, i) => {
+  const el = document.createElement('div');
+  el.className = 'item';
+  el.id = `item-${i}`;
+  el.innerHTML = `<span class="item-num">${String(i+1).padStart(2,'0')}</span><span class="item-url">影片 ${i+1}</span><span class="item-tag" id="tag-${i}"></span>`;
+  el.addEventListener('click', () => loadItem(i));
+  list.appendChild(el);
+});
+
+// Build category buttons
+const toolbar = document.getElementById('toolbar');
+const navBtns = document.createElement('div');
+navBtns.id = 'nav-btns';
+navBtns.innerHTML = `<button class="nav-btn" onclick="go(-1)">← 上一個</button><button class="nav-btn" onclick="go(1)">下一個 →</button>`;
+
+categories.forEach(cat => {
+  const btn = document.createElement('button');
+  btn.className = 'cat-btn';
+  btn.textContent = cat.name;
+  btn.style.borderColor = cat.color + '66';
+  btn.addEventListener('click', () => tag(cat));
+  toolbar.appendChild(btn);
+});
+toolbar.appendChild(navBtns);
+
+function loadItem(i) {
+  current = i;
+  const url = reels[i];
+  const code = url.match(/\/(reel|p)\/([^/?]+)/)?.[2];
+  document.getElementById('frame').src = `https://www.instagram.com/p/${code}/embed/`;
+  document.querySelectorAll('.item').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById(`item-${i}`);
+  el.classList.add('active');
+  el.scrollIntoView({ block: 'nearest' });
+}
+
+function tag(cat) {
+  tags[current] = cat.name;
+  const tagEl = document.getElementById(`tag-${current}`);
+  tagEl.textContent = cat.name;
+  tagEl.style.background = cat.bg + '33';
+  tagEl.style.color = cat.color;
+  tagEl.style.border = `1px solid ${cat.bg}55`;
+  updateResult();
+  go(1);
+}
+
+function go(dir) {
+  const next = (current + dir + reels.length) % reels.length;
+  loadItem(next);
+}
+
+function updateResult() {
+  const grouped = {};
+  categories.forEach(c => grouped[c.name] = []);
+  Object.entries(tags).forEach(([i, cat]) => {
+    if (grouped[cat]) grouped[cat].push(parseInt(i)+1);
+  });
+  const lines = Object.entries(grouped)
+    .filter(([,nums]) => nums.length > 0)
+    .map(([cat, nums]) => `${cat}：${nums.join(', ')}`);
+  document.getElementById('result-output').value = lines.join('\n');
+}
+
+function copyResult() {
+  const ta = document.getElementById('result-output');
+  navigator.clipboard.writeText(ta.value);
+}
+
+function clearAll() {
+  Object.keys(tags).forEach(k => delete tags[k]);
+  document.querySelectorAll('.item-tag').forEach(el => { el.textContent = ''; el.style = ''; });
+  document.getElementById('result-output').value = '';
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+  categories.forEach((cat, i) => {
+    if (e.key === String(i+1)) tag(cat);
+  });
+});
+
+loadItem(0);
+</script>
+</body>
+</html>
