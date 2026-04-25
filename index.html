@@ -1026,9 +1026,14 @@
 
     function updateCarousel() {
       const filtered = getFiltered();
+      const len = filtered.length;
       document.querySelectorAll('.c-card').forEach(card => {
         const idx = parseInt(card.dataset.idx);
-        card.dataset.pos = idx - activeIdx;
+        let pos = idx - activeIdx;
+        // Wrap to shortest arc
+        if (pos >  Math.floor(len / 2)) pos -= len;
+        if (pos < -Math.floor(len / 2)) pos += len;
+        card.dataset.pos = pos;
       });
     }
 
