@@ -82,8 +82,8 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 2rem 3rem 5rem;
+      justify-content: center;
+      padding: 8rem 3rem 4rem;
     }
 
     .hero-label {
@@ -277,6 +277,20 @@
     }
 
     .cl-item:hover { color: var(--text); }
+
+    .cl-logo {
+      height: 26px;
+      width: auto;
+      max-width: 110px;
+      object-fit: contain;
+      opacity: 0.55;
+      filter: brightness(0) invert(1);
+      vertical-align: middle;
+      transition: opacity 0.2s;
+      cursor: default;
+    }
+
+    .cl-logo:hover { opacity: 0.9; }
 
     .cl-sep { color: var(--border); }
 
@@ -847,13 +861,27 @@
 
     // Clients marquee
     const clients = [
-      'Mygopen','Sony Music','環球音樂','我的檔期','夜市王',
-      '龍虎門247','韋禮安','蘇打綠','呱吉','薩泰爾',
-      '賀瓏夜夜秀','炎上','Funxreality','旺福','黃若欣'
+      { name: 'Sony Music',  src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Sony_Music_logo.svg/160px-Sony_Music_logo.svg.png' },
+      { name: '環球音樂',     src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Universal_Music_Group_Logo_2023.svg/200px-Universal_Music_Group_Logo_2023.svg.png' },
+      { name: 'Mygopen',    src: 'https://logo.clearbit.com/mygopen.com' },
+      { name: 'Funxreality', src: 'https://logo.clearbit.com/funxreality.com' },
+      { name: '薩泰爾',      src: 'https://logo.clearbit.com/satiretw.com' },
+      { name: '我的檔期',    src: '' },
+      { name: '夜市王',      src: '' },
+      { name: '龍虎門247',   src: '' },
+      { name: '韋禮安',      src: '' },
+      { name: '蘇打綠',      src: '' },
+      { name: '呱吉',        src: '' },
+      { name: '賀瓏夜夜秀',  src: '' },
+      { name: '炎上',        src: '' },
+      { name: '旺福',        src: '' },
+      { name: '黃若欣',      src: '' },
     ];
     const doubled = [...clients, ...clients];
     document.getElementById('marquee').innerHTML = doubled.map(c =>
-      `<span class="cl-item">${c}</span><span class="cl-sep">&nbsp;/&nbsp;</span>`
+      c.src
+        ? `<img class="cl-logo" src="${c.src}" alt="${c.name}" onerror="this.outerHTML='<span class=cl-item>${c.name}</span>'"><span class="cl-sep">&nbsp;/&nbsp;</span>`
+        : `<span class="cl-item">${c.name}</span><span class="cl-sep">&nbsp;/&nbsp;</span>`
     ).join('');
 
     // Carousel with categories
@@ -972,7 +1000,6 @@
             <div class="play-btn">
               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </div>
-            <span class="c-label">Watch Reel</span>
           </div>
         </div>
         `;
