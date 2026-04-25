@@ -285,43 +285,78 @@
       to   { transform: translateX(-50%); }
     }
 
-    /* ── WORK ── */
-    .work-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.75rem;
+    /* ── CAROUSEL ── */
+    #work { overflow: hidden; }
+
+    .carousel-stage {
+      position: relative;
+      height: 460px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .reel-card {
+    .c-card {
+      position: absolute;
+      left: 50%;
+      width: 230px;
       aspect-ratio: 9 / 16;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 3px;
+      border-radius: 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 1rem;
-      text-align: center;
-      padding: 1.5rem;
-      transition: border-color 0.3s, transform 0.3s;
-      position: relative;
+      cursor: pointer;
       overflow: hidden;
+      transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94),
+                  opacity 0.5s ease,
+                  border-color 0.3s;
     }
 
-    .reel-card::before {
+    .c-card[data-pos="0"] {
+      transform: translateX(-50%) scale(1);
+      opacity: 1;
+      z-index: 3;
+      border-color: #333;
+    }
+    .c-card[data-pos="-1"] {
+      transform: translateX(calc(-50% - 255px)) scale(0.74);
+      opacity: 0.5;
+      z-index: 2;
+    }
+    .c-card[data-pos="1"] {
+      transform: translateX(calc(-50% + 255px)) scale(0.74);
+      opacity: 0.5;
+      z-index: 2;
+    }
+    .c-card[data-pos="-2"] {
+      transform: translateX(calc(-50% - 450px)) scale(0.52);
+      opacity: 0.2;
+      z-index: 1;
+    }
+    .c-card[data-pos="2"] {
+      transform: translateX(calc(-50% + 450px)) scale(0.52);
+      opacity: 0.2;
+      z-index: 1;
+    }
+    .c-card:not([data-pos="-2"]):not([data-pos="-1"]):not([data-pos="0"]):not([data-pos="1"]):not([data-pos="2"]) {
+      transform: translateX(-50%) scale(0);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .c-card[data-pos="0"]::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 60%, rgba(255,255,255,0.03), transparent 70%);
+      background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.04), transparent 70%);
+      pointer-events: none;
     }
 
-    .reel-card:hover {
-      border-color: #383838;
-      transform: translateY(-5px);
-    }
-
-    .reel-num {
+    .c-num {
       position: absolute;
       top: 1rem;
       left: 1.25rem;
@@ -331,36 +366,112 @@
     }
 
     .play-btn {
-      width: 44px;
-      height: 44px;
-      border: 1.5px solid rgba(235,235,235,0.25);
+      width: 52px;
+      height: 52px;
+      border: 1.5px solid rgba(235,235,235,0.3);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: border-color 0.3s, transform 0.3s;
+      transition: border-color 0.3s, transform 0.3s, background 0.3s;
     }
 
-    .reel-card:hover .play-btn {
-      border-color: rgba(235,235,235,0.7);
-      transform: scale(1.1);
+    .c-card[data-pos="0"]:hover .play-btn {
+      border-color: rgba(235,235,235,0.9);
+      background: rgba(255,255,255,0.05);
+      transform: scale(1.12);
     }
 
     .play-btn svg {
       fill: rgba(235,235,235,0.5);
-      width: 14px;
-      height: 14px;
-      margin-left: 2px;
+      width: 16px;
+      height: 16px;
+      margin-left: 3px;
     }
 
-    .reel-card:hover .play-btn svg { fill: var(--text); }
+    .c-card[data-pos="0"]:hover .play-btn svg { fill: var(--text); }
 
-    .reel-text {
+    .c-label {
       font-size: 0.6rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--dim);
     }
+
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .c-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--dim);
+      padding: 0.65rem 2rem;
+      font-family: var(--font);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .c-btn:hover { color: var(--text); border-color: #444; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(0,0,0,0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s;
+      backdrop-filter: blur(6px);
+    }
+
+    .lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .lb-inner {
+      position: relative;
+      width: min(360px, 88vw);
+      aspect-ratio: 9 / 16;
+      max-height: 85vh;
+    }
+
+    .lb-inner iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .lb-close {
+      position: absolute;
+      top: -2.2rem;
+      right: 0;
+      background: none;
+      border: none;
+      color: rgba(235,235,235,0.6);
+      font-family: var(--font);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .lb-close:hover { color: var(--text); }
 
     /* ── CONTACT ── */
     #contact { border-top: 1px solid var(--border); }
@@ -593,8 +704,20 @@
   <!-- WORK -->
   <section id="work">
     <p class="s-label fi">Selected Works</p>
-    <div class="work-grid" id="work-grid"></div>
+    <div class="carousel-stage fi" id="carousel"></div>
+    <div class="carousel-nav fi">
+      <button class="c-btn" id="c-prev">← Prev</button>
+      <button class="c-btn" id="c-next">Next →</button>
+    </div>
   </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <div class="lb-inner">
+      <button class="lb-close" id="lb-close">✕ Close</button>
+      <iframe id="lb-frame" src="" allowfullscreen></iframe>
+    </div>
+  </div>
 
   <!-- CONTACT -->
   <section id="contact">
@@ -668,30 +791,86 @@
       `<span class="cl-item">${c}</span><span class="cl-sep">&nbsp;/&nbsp;</span>`
     ).join('');
 
-    // Work grid
+    // Carousel
     const reels = [
-      { url: 'https://www.instagram.com/reel/DQW3msWCRcD/', n: '01' },
-      { url: 'https://www.instagram.com/reel/DQYnrl_gVJV/', n: '02' },
-      { url: 'https://www.instagram.com/reel/DQRk9keE1WB/', n: '03' },
-      { url: 'https://www.instagram.com/reel/DO5oBzogZag/', n: '04' },
-      { url: 'https://www.instagram.com/reel/DPBWbEAk_JV/', n: '05' },
-      { url: 'https://www.instagram.com/reel/DINi-5RxLSu/', n: '06' },
-      { url: 'https://www.instagram.com/reel/DHioPCZSFhb/', n: '07' },
-      { url: 'https://www.instagram.com/reel/DH5lrlIh9mE/', n: '08' },
+      'https://www.instagram.com/reel/DQW3msWCRcD/',
+      'https://www.instagram.com/reel/DQYnrl_gVJV/',
+      'https://www.instagram.com/reel/DQRk9keE1WB/',
+      'https://www.instagram.com/reel/DO5oBzogZag/',
+      'https://www.instagram.com/reel/DPBWbEAk_JV/',
+      'https://www.instagram.com/reel/DINi-5RxLSu/',
+      'https://www.instagram.com/reel/DHioPCZSFhb/',
+      'https://www.instagram.com/reel/DH5lrlIh9mE/',
     ];
 
-    const grid = document.getElementById('work-grid');
-    grid.innerHTML = reels.map(r => `
-      <a href="${r.url}" target="_blank" rel="noopener" class="reel-card fi">
-        <span class="reel-num">${r.n}</span>
+    let activeIdx = 0;
+    const carousel = document.getElementById('carousel');
+
+    carousel.innerHTML = reels.map((url, i) => `
+      <div class="c-card" data-url="${url}" data-idx="${i}">
+        <span class="c-num">0${i+1}</span>
         <div class="play-btn">
           <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
         </div>
-        <span class="reel-text">Watch Reel</span>
-      </a>
+        <span class="c-label">Watch Reel</span>
+      </div>
     `).join('');
 
-    document.querySelectorAll('.reel-card.fi').forEach(el => io.observe(el));
+    function updateCarousel() {
+      document.querySelectorAll('.c-card').forEach(card => {
+        const idx = parseInt(card.dataset.idx);
+        const pos = idx - activeIdx;
+        card.dataset.pos = pos;
+      });
+    }
+
+    updateCarousel();
+
+    document.getElementById('c-prev').addEventListener('click', () => {
+      activeIdx = (activeIdx - 1 + reels.length) % reels.length;
+      updateCarousel();
+    });
+
+    document.getElementById('c-next').addEventListener('click', () => {
+      activeIdx = (activeIdx + 1) % reels.length;
+      updateCarousel();
+    });
+
+    // Click side cards to navigate
+    carousel.addEventListener('click', e => {
+      const card = e.target.closest('.c-card');
+      if (!card) return;
+      const pos = parseInt(card.dataset.pos);
+      if (pos !== 0) {
+        activeIdx = parseInt(card.dataset.idx);
+        updateCarousel();
+        return;
+      }
+      // Active card → open lightbox
+      const url = card.dataset.url;
+      const code = url.match(/reel\/([^/?]+)/)?.[1];
+      if (!code) return;
+      document.getElementById('lb-frame').src = `https://www.instagram.com/p/${code}/embed/`;
+      document.getElementById('lightbox').classList.add('open');
+    });
+
+    // Lightbox close
+    const lightbox = document.getElementById('lightbox');
+    document.getElementById('lb-close').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      setTimeout(() => { document.getElementById('lb-frame').src = ''; }, 350);
+    }
+
+    // Keyboard arrow navigation
+    document.addEventListener('keydown', e => {
+      if (lightbox.classList.contains('open')) return;
+      if (e.key === 'ArrowLeft') document.getElementById('c-prev').click();
+      if (e.key === 'ArrowRight') document.getElementById('c-next').click();
+    });
 
     // Contact form success message
     const form = document.getElementById('contact-form');
