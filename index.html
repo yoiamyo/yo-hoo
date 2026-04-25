@@ -967,6 +967,23 @@
     let activeIdx = Math.floor(Math.random() * allReels.length);
     const carousel = document.getElementById('carousel');
 
+    // Featured reel shortcode per category
+    const featuredCode = {
+      '藝人':  'DHTLMQ_zU1M',
+      '品牌':  'DKmHzGQhFR_',
+      '節目':  'DP0X8kukruF',
+      '創作者': 'DXRiN_sjKCb',
+      '戲劇':  'DVf5-_UCedF',
+      '活動':  'DLc35eXSOzb',
+    };
+
+    function featuredIdx(filtered, cat) {
+      const code = featuredCode[cat];
+      if (!code) return Math.floor(filtered.length / 2);
+      const idx = filtered.findIndex(r => r.url.includes(code));
+      return idx >= 0 ? idx : Math.floor(filtered.length / 2);
+    }
+
     // Build tabs
     const tabsEl = document.getElementById('work-tabs');
     tabsEl.innerHTML = cats.map(c =>
@@ -979,7 +996,7 @@
       activeFilter = btn.dataset.cat;
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === activeFilter));
       const filtered = getFiltered();
-      activeIdx = Math.floor(filtered.length / 2);
+      activeIdx = featuredIdx(filtered, activeFilter);
       renderCarousel();
     });
 
