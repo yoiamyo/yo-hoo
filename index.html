@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>yo-hoo — 唷呼有限公司</title>
+  <meta name="description" content="唷呼有限公司 | 創意社群行銷 · 影像拍攝 · 短影片製作 | 服務藝人、網紅、內容創作者">
+  <meta property="og:title" content="yo-hoo — 唷呼有限公司">
+  <meta property="og:description" content="創意社群行銷 · 影像拍攝 · 短影片製作 · 服務藝人、網紅、內容創作者">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080808;
+      --surface: #101010;
+      --border: #1c1c1c;
+      --text: #EBEBEB;
+      --dim: #555;
+      --font: 'Space Grotesk', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.4s, border-color 0.4s;
+      border-bottom: 1px solid transparent;
+    }
+
+    nav.scrolled {
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom-color: var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .nav-links a {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2rem 3rem 5rem;
+    }
+
+    .hero-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(3.8rem, 11vw, 11rem);
+      font-weight: 700;
+      line-height: 0.92;
+      letter-spacing: -0.025em;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-title span { display: block; }
+
+    .hero-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-desc {
+      font-size: 0.95rem;
+      color: var(--dim);
+      line-height: 1.8;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      transition: color 0.2s;
+    }
+
+    .hero-cta:hover { color: var(--text); }
+
+    .hero-cta::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: currentColor;
+      transition: width 0.3s;
+    }
+
+    .hero-cta:hover::after { width: 70px; }
+
+    /* ── SHARED ── */
+    section { padding: 6rem 3rem; }
+
+    .s-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 3rem;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-body {
+      font-size: 1.2rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--text);
+    }
+
+    .about-stats {
+      margin-top: 3rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .stat-num {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-top: 0.5rem;
+    }
+
+    /* ── SERVICES ── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border: 1px solid var(--border);
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .svc {
+      background: var(--bg);
+      padding: 3rem;
+      transition: background 0.3s;
+    }
+
+    .svc:hover { background: var(--surface); }
+
+    .svc-num {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+      margin-bottom: 2.5rem;
+    }
+
+    .svc-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 1rem;
+    }
+
+    .svc-desc {
+      font-size: 0.88rem;
+      color: var(--dim);
+      line-height: 1.8;
+    }
+
+    /* ── CLIENTS ── */
+    #clients { overflow: hidden; }
+
+    .marquee-wrap { overflow: hidden; position: relative; }
+
+    .marquee-wrap::before,
+    .marquee-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 1;
+    }
+
+    .marquee-wrap::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
+    .marquee-wrap::after { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+
+    .marquee-track {
+      display: flex;
+      gap: 2rem;
+      animation: marquee 30s linear infinite;
+      width: max-content;
+    }
+
+    .marquee-track:hover { animation-play-state: paused; }
+
+    .cl-item {
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+      white-space: nowrap;
+      transition: color 0.2s;
+      cursor: default;
+    }
+
+    .cl-item:hover { color: var(--text); }
+
+    .cl-sep { color: var(--border); }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── WORK ── */
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+
+    .reel-card {
+      aspect-ratio: 9 / 16;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      text-align: center;
+      padding: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reel-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 60%, rgba(255,255,255,0.03), transparent 70%);
+    }
+
+    .reel-card:hover {
+      border-color: #383838;
+      transform: translateY(-5px);
+    }
+
+    .reel-num {
+      position: absolute;
+      top: 1rem;
+      left: 1.25rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+    }
+
+    .play-btn {
+      width: 44px;
+      height: 44px;
+      border: 1.5px solid rgba(235,235,235,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .reel-card:hover .play-btn {
+      border-color: rgba(235,235,235,0.7);
+      transform: scale(1.1);
+    }
+
+    .play-btn svg {
+      fill: rgba(235,235,235,0.5);
+      width: 14px;
+      height: 14px;
+      margin-left: 2px;
+    }
+
+    .reel-card:hover .play-btn svg { fill: var(--text); }
+
+    .reel-text {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    /* ── CONTACT ── */
+    #contact { border-top: 1px solid var(--border); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7rem;
+      align-items: start;
+    }
+
+    .contact-heading {
+      font-size: clamp(2.8rem, 5.5vw, 5.5rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 3rem;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .contact-link-row label {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 0.3rem;
+    }
+
+    .contact-link-row a {
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .contact-link-row a:hover { color: var(--dim); }
+
+    form { display: flex; flex-direction: column; gap: 2rem; }
+
+    .field { display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .field label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .field input,
+    .field textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 0.7rem 0;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      color: var(--text);
+      outline: none;
+      width: 100%;
+      transition: border-color 0.25s;
+    }
+
+    .field input:focus,
+    .field textarea:focus { border-bottom-color: #444; }
+
+    .field textarea { resize: vertical; min-height: 110px; }
+
+    .btn-send {
+      align-self: flex-start;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      padding: 0.9rem 2.5rem;
+      font-family: var(--font);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-send:hover { opacity: 0.8; transform: translateY(-2px); }
+
+    .form-notice {
+      font-size: 0.72rem;
+      color: var(--dim);
+      display: none;
+      margin-top: -0.5rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.75rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ft-brand {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .ft-copy {
+      font-size: 0.7rem;
+      color: var(--dim);
+    }
+
+    /* ── FADE-IN ── */
+    .fi {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+
+    .fi.on { opacity: 1; transform: none; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4.5rem 1.5rem; }
+      #hero { padding: 1.5rem 1.5rem 4rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-stats { grid-template-columns: repeat(3,1fr); gap: 1rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .work-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-grid { grid-template-columns: 1fr; gap: 3.5rem; }
+      footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#hero" class="nav-logo">yo-hoo</a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Works</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div>
+      <p class="hero-label">唷呼有限公司 · Creative Studio · Est. 2023</p>
+      <h1 class="hero-title">
+        <span>We Make</span>
+        <span>Content</span>
+        <span>Matter.</span>
+      </h1>
+      <div class="hero-foot">
+        <p class="hero-desc">
+          創意社群行銷 · 影像拍攝 · 短影片製作<br>
+          服務藝人、網紅、內容創作者
+        </p>
+        <a href="#work" class="hero-cta">View Our Work</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid fi">
+      <p class="s-label">About</p>
+      <div>
+        <p class="about-body">
+          yo-hoo 是一間以內容創作為核心的創意工作室，專注短影片製作與社群行銷策略，協助藝人、KOL 與品牌找到屬於自己的聲音，在最短的時間內說出最有力的一句話。
+        </p>
+        <div class="about-stats">
+          <div>
+            <div class="stat-num">15+</div>
+            <div class="stat-label">品牌合作</div>
+          </div>
+          <div>
+            <div class="stat-num">2Y</div>
+            <div class="stat-label">業界經驗</div>
+          </div>
+          <div>
+            <div class="stat-num">∞</div>
+            <div class="stat-label">創意能量</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <p class="s-label fi">Services</p>
+    <div class="services-grid">
+      <div class="svc fi">
+        <p class="svc-num">01</p>
+        <h3 class="svc-title">社群行銷策略</h3>
+        <p class="svc-desc">從定位到執行，制定符合品牌個性的社群策略，讓每一則內容都有方向、有意圖。</p>
+      </div>
+      <div class="svc fi">
+        <p class="svc-num">02</p>
+        <h3 class="svc-title">短影片製作</h3>
+        <p class="svc-desc">Reels、TikTok、YouTube Shorts，掌握各平台語言，把品牌故事濃縮在 60 秒以內。</p>
+      </div>
+      <div class="svc fi">
+        <p class="svc-num">03</p>
+        <h3 class="svc-title">影像拍攝剪輯</h3>
+        <p class="svc-desc">形象影片、活動紀錄、宣傳素材，從拍攝到後製一條龍，品質不打折。</p>
+      </div>
+      <div class="svc fi">
+        <p class="svc-num">04</p>
+        <h3 class="svc-title">KOL / 創作者合作</h3>
+        <p class="svc-desc">協助品牌與藝人、KOL 對接，確保內容貼近受眾，真實有感。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENTS -->
+  <section id="clients">
+    <p class="s-label fi">Clients &amp; Collaborations</p>
+    <div class="marquee-wrap fi">
+      <div class="marquee-track" id="marquee"></div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <p class="s-label fi">Selected Works</p>
+    <div class="work-grid" id="work-grid"></div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-grid">
+      <div class="fi">
+        <h2 class="contact-heading">Let's<br>Work<br>Together.</h2>
+        <div class="contact-links">
+          <div class="contact-link-row">
+            <label>Email</label>
+            <a href="mailto:yo@yo-hoo.cc">yo@yo-hoo.cc</a>
+          </div>
+          <div class="contact-link-row">
+            <label>Instagram</label>
+            <a href="https://www.instagram.com/yoiamyo" target="_blank" rel="noopener">@yoiamyo</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formspree: 去 formspree.io 建立 form，把 YOUR_FORM_ID 換掉 -->
+      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" id="contact-form" class="fi">
+        <div class="field">
+          <label for="f-name">姓名 / Name</label>
+          <input type="text" id="f-name" name="name" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input type="email" id="f-email" name="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="f-msg">說說你的需求 / Message</label>
+          <textarea id="f-msg" name="message" required></textarea>
+        </div>
+        <p class="form-notice" id="form-notice">✓ 已送出，我們會盡快回覆！</p>
+        <button type="submit" class="btn-send">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="ft-brand">yo-hoo — 唷呼有限公司</span>
+    <span class="ft-copy">© 2025 yo-hoo. All rights reserved.</span>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Fade-in observer
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('on'), i * 80);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fi').forEach(el => io.observe(el));
+
+    // Clients marquee
+    const clients = [
+      'Mygopen','Sony Music','環球音樂','我的檔期','夜市王',
+      '龍虎門247','韋禮安','蘇打綠','呱吉','薩泰爾',
+      '賀瓏夜夜秀','炎上','Funxreality','旺福','黃若欣'
+    ];
+    const doubled = [...clients, ...clients];
+    document.getElementById('marquee').innerHTML = doubled.map(c =>
+      `<span class="cl-item">${c}</span><span class="cl-sep">&nbsp;/&nbsp;</span>`
+    ).join('');
+
+    // Work grid
+    const reels = [
+      { url: 'https://www.instagram.com/reel/DQW3msWCRcD/', n: '01' },
+      { url: 'https://www.instagram.com/reel/DQYnrl_gVJV/', n: '02' },
+      { url: 'https://www.instagram.com/reel/DQRk9keE1WB/', n: '03' },
+      { url: 'https://www.instagram.com/reel/DO5oBzogZag/', n: '04' },
+      { url: 'https://www.instagram.com/reel/DPBWbEAk_JV/', n: '05' },
+      { url: 'https://www.instagram.com/reel/DINi-5RxLSu/', n: '06' },
+      { url: 'https://www.instagram.com/reel/DHioPCZSFhb/', n: '07' },
+      { url: 'https://www.instagram.com/reel/DH5lrlIh9mE/', n: '08' },
+    ];
+
+    const grid = document.getElementById('work-grid');
+    grid.innerHTML = reels.map(r => `
+      <a href="${r.url}" target="_blank" rel="noopener" class="reel-card fi">
+        <span class="reel-num">${r.n}</span>
+        <div class="play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <span class="reel-text">Watch Reel</span>
+      </a>
+    `).join('');
+
+    document.querySelectorAll('.reel-card.fi').forEach(el => io.observe(el));
+
+    // Contact form success message
+    const form = document.getElementById('contact-form');
+    const notice = document.getElementById('form-notice');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        notice.style.display = 'block';
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>
