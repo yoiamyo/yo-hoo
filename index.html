@@ -293,6 +293,28 @@
 
     .cl-sep { color: var(--border); }
 
+    /* Custom tooltip */
+    #cl-tooltip {
+      position: fixed;
+      background: #fff;
+      color: #111;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.7rem;
+      border-radius: 3px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.15s, transform 0.15s;
+      white-space: nowrap;
+      z-index: 999;
+    }
+
+    #cl-tooltip.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     @keyframes marquee {
       from { transform: translateX(0); }
       to   { transform: translateX(-50%); }
@@ -901,9 +923,28 @@
     ];
     const doubled = [...clients, ...clients];
     document.getElementById('marquee').innerHTML = doubled.map(c =>
-      `<img class="cl-logo" src="${c.src}" alt="${c.name}" title="${c.name}" onerror="this.outerHTML='<span class=cl-item>${c.name}</span>'">`
+      `<img class="cl-logo" src="${c.src}" alt="${c.name}" data-label="${c.name}" onerror="this.outerHTML='<span class=cl-item>${c.name}</span>'">`
       + `<span class="cl-sep">&nbsp;/&nbsp;</span>`
     ).join('');
+
+    // Custom tooltip
+    const tip = document.createElement('div');
+    tip.id = 'cl-tooltip';
+    document.body.appendChild(tip);
+
+    document.getElementById('marquee').addEventListener('mouseover', e => {
+      const img = e.target.closest('.cl-logo');
+      if (!img) return;
+      tip.textContent = img.dataset.label;
+      tip.classList.add('show');
+    });
+    document.getElementById('marquee').addEventListener('mousemove', e => {
+      tip.style.left = (e.clientX + 12) + 'px';
+      tip.style.top  = (e.clientY - 32) + 'px';
+    });
+    document.getElementById('marquee').addEventListener('mouseleave', () => {
+      tip.classList.remove('show');
+    });
 
     // Carousel with categories
     const allReels = [
