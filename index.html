@@ -1049,7 +1049,7 @@
     function openLightbox(card, url) {
       if (lbOpen) return;
       lbOpen = true;
-      const code = url.match(/reel\/([^/?]+)/)?.[1];
+      const code = url.match(/\/(reel|p)\/([^/?]+)/)?.[2];
       if (!code) return;
 
       // Start at card's exact position
