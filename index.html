@@ -950,8 +950,9 @@
       const btn = e.target.closest('.tab-btn');
       if (!btn) return;
       activeFilter = btn.dataset.cat;
-      activeIdx = 0;
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === activeFilter));
+      const filtered = getFiltered();
+      activeIdx = Math.floor(filtered.length / 2);
       renderCarousel();
     });
 
