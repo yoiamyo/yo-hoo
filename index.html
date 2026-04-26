@@ -10,18 +10,20 @@
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #080808;
+      --bg: #0a0808;
       --surface: #101010;
       --border: #1c1c1c;
       --text: #EBEBEB;
       --dim: #555;
       --orange: #F97316;
+      --gold: #e8c87a;
       --font: 'Space Grotesk', sans-serif;
+      --serif: 'Playfair Display', serif;
     }
 
     html { scroll-behavior: smooth; }
@@ -31,6 +33,28 @@
       color: var(--text);
       font-family: var(--font);
       overflow-x: hidden;
+    }
+
+    /* Global grain overlay */
+    #page-grain {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 9999;
+      width: 100%; height: 100%;
+    }
+
+    /* Global CRT scanlines */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.04) 2px,
+        rgba(0,0,0,0.04) 4px
+      );
+      pointer-events: none;
+      z-index: 9998;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -56,11 +80,14 @@
     }
 
     .nav-logo {
+      font-family: var(--serif);
       font-size: 1.25rem;
       font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
     }
+
+    .nav-logo:hover { color: var(--gold); }
 
     .nav-links {
       list-style: none;
@@ -87,83 +114,90 @@
       padding: 8rem 3rem 4rem;
       position: relative;
       overflow: hidden;
+      background: #0a0808;
     }
 
-    /* Orange tape */
-    .hero-tape {
-      position: absolute;
-      top: 11rem;
-      right: -24px;
-      transform: rotate(6deg);
-      background: var(--orange);
-      color: #000;
-      font-size: 0.52rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      padding: 0.32rem 4rem 0.32rem 1.5rem;
-      white-space: nowrap;
-      z-index: 1;
+    /* Fog */
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 65% 55%, rgba(80,60,40,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 20% 70%, rgba(50,40,30,0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 30% 40% at 80% 20%, rgba(60,50,35,0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    /* Circular spinning badge */
-    .hero-badge {
-      position: absolute;
-      top: 9rem;
-      right: 4.5rem;
-      width: 96px;
-      height: 96px;
-      z-index: 2;
+    /* CRT scanlines */
+    #hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.07) 2px,
+        rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 3;
     }
 
-    .hero-badge svg {
-      width: 100%;
-      height: 100%;
-      animation: badge-spin 14s linear infinite;
+    /* Vignette */
+    .hero-vignette {
+      position: absolute; inset: 0; z-index: 1;
+      background: radial-gradient(ellipse 85% 85% at 50% 50%, transparent 40%, rgba(0,0,0,0.6) 100%);
+      pointer-events: none;
     }
 
-    @keyframes badge-spin { to { transform: rotate(360deg); } }
-
-    .hero-badge-dot {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--orange);
+    /* Film grain */
+    .hero-grain {
+      position: absolute; inset: 0; z-index: 1;
+      pointer-events: none;
+      width: 100%; height: 100%;
     }
 
-    /* Title accent */
-    .hero-accent {
-      color: var(--orange);
-      text-decoration: underline wavy var(--orange);
-      text-decoration-thickness: 2px;
-      text-underline-offset: 0.1em;
-    }
-
-    @media (max-width: 768px) {
-      .hero-badge { top: 5rem; right: 1.5rem; width: 68px; height: 68px; }
-      .hero-tape  { top: 6.5rem; right: -16px; font-size: 0.45rem; }
-    }
+    /* Hero content sits above all overlays */
+    .hero-content { position: relative; z-index: 2; }
 
     .hero-label {
+      font-family: var(--font);
       font-size: 0.7rem;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: var(--dim);
+      color: rgba(232,224,212,0.35);
       margin-bottom: 1.5rem;
     }
 
     .hero-title {
+      font-family: var(--serif);
       font-size: clamp(3.8rem, 11vw, 11rem);
-      font-weight: 700;
+      font-weight: 900;
       line-height: 0.92;
-      letter-spacing: -0.025em;
-      text-transform: uppercase;
+      letter-spacing: -0.01em;
       margin-bottom: 2.5rem;
+      text-shadow:
+        0 0 20px rgba(232,200,150,0.4),
+        0 0 60px rgba(220,180,100,0.15),
+        2px 0 0 rgba(255,80,80,0.12),
+        -2px 0 0 rgba(80,150,255,0.1);
     }
 
     .hero-title span { display: block; }
+
+    /* Title accent */
+    .hero-accent {
+      color: var(--gold);
+      text-decoration: underline wavy var(--gold);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 0.1em;
+      text-shadow:
+        0 0 25px rgba(232,200,100,0.7),
+        0 0 70px rgba(232,200,100,0.3),
+        2px 0 0 rgba(255,80,80,0.2),
+        -2px 0 0 rgba(80,150,255,0.15);
+    }
 
     .hero-foot {
       display: flex;
@@ -174,22 +208,26 @@
     }
 
     .hero-desc {
+      font-family: var(--font);
       font-size: 0.95rem;
-      color: var(--dim);
+      color: rgba(232,224,212,0.45);
       line-height: 1.8;
+      letter-spacing: 0.02em;
     }
 
     .hero-cta {
+      font-family: var(--font);
       display: inline-flex;
       align-items: center;
       gap: 0.75rem;
       font-size: 0.72rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--orange);
-      transition: opacity 0.2s;
-      border-bottom: 1px solid var(--orange);
+      color: rgba(232,200,120,0.75);
+      border-bottom: 1px solid rgba(232,200,120,0.3);
       padding-bottom: 0.2rem;
+      transition: opacity 0.2s;
+      text-shadow: 0 0 12px rgba(232,200,100,0.4);
     }
 
     .hero-cta:hover { opacity: 0.7; }
@@ -206,8 +244,9 @@
     }
 
     .section-title {
+      font-family: var(--serif);
       font-size: 2rem;
-      font-weight: 700;
+      font-weight: 900;
       letter-spacing: -0.01em;
       margin-bottom: 2.5rem;
     }
@@ -245,8 +284,9 @@
     }
 
     .stat-num {
+      font-family: var(--serif);
       font-size: 2.5rem;
-      font-weight: 700;
+      font-weight: 900;
       letter-spacing: -0.02em;
       line-height: 1;
     }
@@ -284,10 +324,10 @@
     }
 
     .svc-title {
+      font-family: var(--serif);
       font-size: 1.4rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      font-weight: 700;
+      letter-spacing: 0.01em;
       margin-bottom: 1rem;
     }
 
@@ -525,7 +565,7 @@
     }
 
     .tab-btn:hover { color: var(--text); }
-    .tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
 
     /* ── CAROUSEL ── */
     #work { overflow: hidden; }
@@ -764,9 +804,9 @@
     }
 
     .contact-heading {
+      font-family: var(--serif);
       font-size: clamp(2.8rem, 5.5vw, 5.5rem);
-      font-weight: 700;
-      text-transform: uppercase;
+      font-weight: 900;
       line-height: 0.95;
       letter-spacing: -0.02em;
       margin-bottom: 3rem;
@@ -822,20 +862,25 @@
 
     .btn-send {
       align-self: flex-start;
-      background: var(--text);
-      color: var(--bg);
-      border: none;
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid rgba(232,200,120,0.4);
       padding: 0.9rem 2.5rem;
       font-family: var(--font);
       font-size: 0.7rem;
-      font-weight: 700;
+      font-weight: 600;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.2s;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+      text-shadow: 0 0 10px rgba(232,200,100,0.3);
     }
 
-    .btn-send:hover { opacity: 0.8; transform: translateY(-2px); }
+    .btn-send:hover {
+      border-color: rgba(232,200,120,0.8);
+      color: rgba(232,200,120,1);
+      transform: translateY(-2px);
+    }
 
     .form-notice {
       font-size: 0.72rem;
@@ -1040,6 +1085,22 @@
 </head>
 <body>
 
+  <!-- Global grain overlay -->
+  <svg id="page-grain" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <filter id="pg-f">
+        <feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="4" seed="7"/>
+        <feColorMatrix type="saturate" values="0" result="g"/>
+        <feComponentTransfer in="g">
+          <feFuncR type="linear" slope="1.5" intercept="-0.3"/>
+          <feFuncG type="linear" slope="1.5" intercept="-0.3"/>
+          <feFuncB type="linear" slope="1.5" intercept="-0.3"/>
+        </feComponentTransfer>
+      </filter>
+    </defs>
+    <rect width="100%" height="100%" fill="white" filter="url(#pg-f)" opacity="0.032"/>
+  </svg>
+
   <!-- NAV -->
   <nav id="nav">
     <a href="#hero" class="nav-logo">yo-hoo</a>
@@ -1052,21 +1113,25 @@
 
   <!-- HERO -->
   <section id="hero">
-    <!-- Tape strip -->
-    <div class="hero-tape">EST. 2023 &nbsp;&nbsp; EST. 2023 &nbsp;&nbsp; EST. 2023 &nbsp;&nbsp; EST. 2023</div>
-    <!-- Spinning badge -->
-    <div class="hero-badge">
-      <svg viewBox="0 0 100 100">
-        <defs>
-          <path id="bp" d="M50,50 m-32,0 a32,32 0 1,1 64,0 a32,32 0 1,1 -64,0"/>
-        </defs>
-        <text font-family="'Space Grotesk',sans-serif" font-size="10.5" font-weight="600" fill="#F97316" letter-spacing="3">
-          <textPath href="#bp">YO-HOO · CREATIVE STUDIO ·&nbsp;</textPath>
-        </text>
-      </svg>
-      <div class="hero-badge-dot"></div>
-    </div>
-    <div>
+    <!-- Vignette -->
+    <div class="hero-vignette"></div>
+    <!-- Film grain -->
+    <svg class="hero-grain" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <filter id="hero-grain-f">
+          <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" seed="15"/>
+          <feColorMatrix type="saturate" values="0" result="g"/>
+          <feComponentTransfer in="g">
+            <feFuncR type="linear" slope="1.6" intercept="-0.3"/>
+            <feFuncG type="linear" slope="1.6" intercept="-0.3"/>
+            <feFuncB type="linear" slope="1.6" intercept="-0.3"/>
+          </feComponentTransfer>
+        </filter>
+      </defs>
+      <rect width="100%" height="100%" fill="white" filter="url(#hero-grain-f)" opacity="0.055"/>
+    </svg>
+    <!-- Content -->
+    <div class="hero-content">
       <p class="hero-label">唷呼有限公司 · Creative Studio · Est. 2023</p>
       <h1 class="hero-title">
         <span>We Make</span>
