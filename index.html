@@ -352,6 +352,7 @@
 
     .marquee-track {
       display: flex;
+      align-items: center;
       gap: 2rem;
       animation: marquee 30s linear infinite;
       width: max-content;
@@ -1188,7 +1189,7 @@
       { name: 'Éclat',      src: 'assets/logos/eclat.webp', h: 38 },
       { name: '這群人 TGOP', src: 'assets/logos/TGOP.png' },
       { name: 'Crypto Brain Bro', src: 'assets/logos/BB.png' },
-      { name: 'KKTIX', src: 'assets/logos/KK.png', h: 36 },
+      { name: 'KKTIX', src: 'assets/logos/KK.png', h: 18 },
     ];
     const doubled = [...clients, ...clients];
     document.getElementById('marquee').innerHTML = doubled.map(c =>
