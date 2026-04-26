@@ -1733,34 +1733,6 @@
       }
     });
   </script>
-  <!-- Grain texture overlay -->
-  <div id="grain-overlay" style="position:fixed;inset:0;pointer-events:none;z-index:997;">
-    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="grain-filter" color-interpolation-filters="linearRGB" x="0%" y="0%" width="100%" height="100%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="4" seed="9" result="noise"/>
-          <feColorMatrix type="saturate" values="0" in="noise" result="grey"/>
-          <feComponentTransfer in="grey" result="boosted">
-            <feFuncR type="linear" slope="1.8" intercept="-0.4"/>
-            <feFuncG type="linear" slope="1.8" intercept="-0.4"/>
-            <feFuncB type="linear" slope="1.8" intercept="-0.4"/>
-          </feComponentTransfer>
-        </filter>
-        <filter id="grain-warp" x="-20%" y="-20%" width="140%" height="140%">
-          <feTurbulence type="turbulence" baseFrequency="0.014" numOctaves="2" seed="3"/>
-          <feDisplacementMap in="SourceGraphic" scale="7" xChannelSelector="R" yChannelSelector="G"/>
-        </filter>
-        <radialGradient id="grain-vig" cx="60%" cy="45%" r="65%">
-          <stop offset="0%" stop-color="transparent"/>
-          <stop offset="100%" stop-color="rgba(0,0,0,0.3)"/>
-        </radialGradient>
-      </defs>
-      <rect width="100%" height="100%" fill="white" filter="url(#grain-filter)" opacity="0.065"/>
-      <line x1="0" y1="18%" x2="100%" y2="17%" stroke="rgba(255,255,255,0.06)" stroke-width="0.8" filter="url(#grain-warp)"/>
-      <line x1="0" y1="61%" x2="100%" y2="60%" stroke="rgba(255,255,255,0.045)" stroke-width="0.7" filter="url(#grain-warp)"/>
-      <rect width="100%" height="100%" fill="url(#grain-vig)"/>
-    </svg>
-  </div>
 
 </body>
 </html>
