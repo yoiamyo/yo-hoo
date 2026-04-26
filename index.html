@@ -92,7 +92,7 @@
     /* Orange tape */
     .hero-tape {
       position: absolute;
-      top: 9rem;
+      top: 11rem;
       right: -24px;
       transform: rotate(6deg);
       background: var(--orange);
@@ -109,7 +109,7 @@
     /* Circular spinning badge */
     .hero-badge {
       position: absolute;
-      top: 10.5rem;
+      top: 9rem;
       right: 4.5rem;
       width: 96px;
       height: 96px;
@@ -136,16 +136,10 @@
     /* Title accent */
     .hero-accent {
       color: var(--orange);
-      position: relative;
-      display: inline-block;
-    }
-
-    .hero-accent::after {
-      content: '';
-      position: absolute;
-      left: -4px; bottom: -4px; right: -4px;
-      height: 10px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12'%3E%3Cpath d='M2 8 Q75 2 150 7 Q225 12 298 5' stroke='%23F97316' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / 100% 100%;
+      text-decoration: underline;
+      text-decoration-color: var(--orange);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 0.12em;
     }
 
     @media (max-width: 768px) {
