@@ -809,6 +809,13 @@
     /* ── CONTACT ── */
     #contact { border-top: 1px solid var(--border); }
 
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7rem;
+      align-items: start;
+    }
+
     .contact-heading {
       font-family: var(--serif);
       font-size: clamp(2.8rem, 5.5vw, 5.5rem);
@@ -1047,6 +1054,7 @@
       .work-grid { grid-template-columns: repeat(2, 1fr); }
       .design-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
 footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
 
       /* Mobile carousel: smaller cards, visible side peeks */
       .carousel-stage { height: 380px; }
@@ -1227,7 +1235,7 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
 
   <!-- CONTACT -->
   <section id="contact">
-    <div class="fi">
+    <div class="contact-grid fi">
       <h2 class="contact-heading">Let's<br>Work<br>Together.</h2>
       <div class="contact-links">
         <div class="contact-link-row">
@@ -1237,6 +1245,10 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
         <div class="contact-link-row">
           <label>Instagram</label>
           <a href="https://www.instagram.com/yoiamyo" target="_blank" rel="noopener">@yoiamyo</a>
+        </div>
+        <div class="contact-link-row">
+          <label>Line</label>
+          <a href="https://line.me/ti/p/~87584" target="_blank" rel="noopener">87584</a>
         </div>
       </div>
     </div>
