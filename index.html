@@ -809,13 +809,6 @@
     /* ── CONTACT ── */
     #contact { border-top: 1px solid var(--border); }
 
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 7rem;
-      align-items: start;
-    }
-
     .contact-heading {
       font-family: var(--serif);
       font-size: clamp(2.8rem, 5.5vw, 5.5rem);
@@ -848,64 +841,6 @@
 
     .contact-link-row a:hover { color: var(--dim); }
 
-    form { display: flex; flex-direction: column; gap: 2rem; }
-
-    .field { display: flex; flex-direction: column; gap: 0.5rem; }
-
-    .field label {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--dim);
-    }
-
-    .field input,
-    .field textarea {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--border);
-      padding: 0.7rem 0;
-      font-family: var(--font);
-      font-size: 0.95rem;
-      color: var(--text);
-      outline: none;
-      width: 100%;
-      transition: border-color 0.25s;
-    }
-
-    .field input:focus,
-    .field textarea:focus { border-bottom-color: #444; }
-
-    .field textarea { resize: vertical; min-height: 110px; }
-
-    .btn-send {
-      align-self: flex-start;
-      background: transparent;
-      color: var(--gold);
-      border: 1px solid rgba(232,200,120,0.4);
-      padding: 0.9rem 2.5rem;
-      font-family: var(--font);
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: border-color 0.2s, color 0.2s, transform 0.2s;
-      text-shadow: 0 0 10px rgba(232,200,100,0.3);
-    }
-
-    .btn-send:hover {
-      border-color: rgba(232,200,120,0.8);
-      color: rgba(232,200,120,1);
-      transform: translateY(-2px);
-    }
-
-    .form-notice {
-      font-size: 0.72rem;
-      color: var(--dim);
-      display: none;
-      margin-top: -0.5rem;
-    }
 
     /* ── FOOTER ── */
     footer {
@@ -1111,8 +1046,7 @@
       .services-grid { grid-template-columns: 1fr; }
       .work-grid { grid-template-columns: repeat(2, 1fr); }
       .design-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-      .contact-grid { grid-template-columns: 1fr; gap: 3.5rem; }
-      footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+footer { flex-direction: column; gap: 0.75rem; text-align: center; }
 
       /* Mobile carousel: smaller cards, visible side peeks */
       .carousel-stage { height: 380px; }
@@ -1293,38 +1227,18 @@
 
   <!-- CONTACT -->
   <section id="contact">
-    <div class="contact-grid">
-      <div class="fi">
-        <h2 class="contact-heading">Let's<br>Work<br>Together.</h2>
-        <div class="contact-links">
-          <div class="contact-link-row">
-            <label>Email</label>
-            <a href="mailto:yo@yo-hoo.cc">yo@yo-hoo.cc</a>
-          </div>
-          <div class="contact-link-row">
-            <label>Instagram</label>
-            <a href="https://www.instagram.com/yoiamyo" target="_blank" rel="noopener">@yoiamyo</a>
-          </div>
+    <div class="fi">
+      <h2 class="contact-heading">Let's<br>Work<br>Together.</h2>
+      <div class="contact-links">
+        <div class="contact-link-row">
+          <label>Email</label>
+          <a href="mailto:yo@yo-hoo.cc">yo@yo-hoo.cc</a>
+        </div>
+        <div class="contact-link-row">
+          <label>Instagram</label>
+          <a href="https://www.instagram.com/yoiamyo" target="_blank" rel="noopener">@yoiamyo</a>
         </div>
       </div>
-
-      <!-- Formspree: 去 formspree.io 建立 form，把 YOUR_FORM_ID 換掉 -->
-      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" id="contact-form" class="fi">
-        <div class="field">
-          <label for="f-name">姓名 / Name</label>
-          <input type="text" id="f-name" name="name" required autocomplete="name">
-        </div>
-        <div class="field">
-          <label for="f-email">Email</label>
-          <input type="email" id="f-email" name="email" required autocomplete="email">
-        </div>
-        <div class="field">
-          <label for="f-msg">說說你的需求 / Message</label>
-          <textarea id="f-msg" name="message" required></textarea>
-        </div>
-        <p class="form-notice" id="form-notice">✓ 已送出，我們會盡快回覆！</p>
-        <button type="submit" class="btn-send">Send Message</button>
-      </form>
     </div>
   </section>
 
@@ -1815,22 +1729,6 @@
       if (e.key === 'Escape') imgLb.classList.remove('open');
     });
 
-    // Contact form success message
-    const form = document.getElementById('contact-form');
-    const notice = document.getElementById('form-notice');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) {
-        notice.style.display = 'block';
-        form.reset();
-      }
-    });
   </script>
 
 </body>
