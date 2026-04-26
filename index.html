@@ -796,6 +796,60 @@
 
     .ft-links a:hover { color: var(--text); }
 
+    /* ── DESIGN ── */
+    .design-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+
+    .dg-item {
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 4px;
+      aspect-ratio: 3 / 4;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .dg-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0.85;
+      transition: transform 0.4s ease, opacity 0.3s;
+    }
+
+    .dg-item:hover img { transform: scale(1.04); opacity: 1; }
+
+    .img-lb {
+      position: fixed;
+      inset: 0;
+      z-index: 600;
+      background: rgba(0,0,0,0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .img-lb.open { opacity: 1; pointer-events: all; }
+
+    .img-lb img {
+      max-width: min(90vw, 860px);
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 4px;
+      cursor: default;
+    }
+
     /* ── FADE-IN ── */
     .fi {
       opacity: 0;
@@ -815,6 +869,7 @@
       .about-stats { grid-template-columns: repeat(3,1fr); gap: 1rem; }
       .services-grid { grid-template-columns: 1fr; }
       .work-grid { grid-template-columns: repeat(2, 1fr); }
+      .design-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
       .contact-grid { grid-template-columns: 1fr; gap: 3.5rem; }
       footer { flex-direction: column; gap: 0.75rem; text-align: center; }
 
@@ -891,18 +946,18 @@
     <div class="services-grid">
       <div class="svc fi">
         <p class="svc-num">01</p>
-        <h3 class="svc-title">社群行銷策略</h3>
-        <p class="svc-desc">從定位到執行，制定符合品牌個性的社群策略，讓每一則內容都有方向、有意圖。</p>
+        <h3 class="svc-title">社群行銷</h3>
+        <p class="svc-desc">帳號定位、內容策略、日常貼文與互動管理，讓品牌在社群上有個性、有存在感。</p>
       </div>
       <div class="svc fi">
         <p class="svc-num">02</p>
-        <h3 class="svc-title">短影片製作</h3>
-        <p class="svc-desc">Reels、TikTok、YouTube Shorts，掌握各平台語言，把品牌故事濃縮在 60 秒以內。</p>
+        <h3 class="svc-title">影像製作</h3>
+        <p class="svc-desc">以短影音為核心——Reels、TikTok、YouTube Shorts，用 60 秒把品牌故事說清楚、說有感。</p>
       </div>
       <div class="svc fi">
         <p class="svc-num">03</p>
-        <h3 class="svc-title">影像拍攝剪輯</h3>
-        <p class="svc-desc">形象影片、活動紀錄、宣傳素材，從拍攝到後製一條龍，品質不打折。</p>
+        <h3 class="svc-title">平面設計</h3>
+        <p class="svc-desc">視覺識別、社群圖卡、活動主視覺，讓品牌在每一個畫面都一致、有力道。</p>
       </div>
       <div class="svc fi">
         <p class="svc-num">04</p>
@@ -930,6 +985,13 @@
     <button class="lb-close" id="lb-close">✕</button>
     <iframe id="lb-frame" src="" allowfullscreen></iframe>
   </div>
+
+  <!-- DESIGN -->
+  <section id="design">
+    <p class="s-label fi">Graphic Design</p>
+    <h2 class="section-title fi">平面設計</h2>
+    <div class="design-grid" id="design-grid"></div>
+  </section>
 
   <!-- SOCIAL -->
   <section id="social">
@@ -1456,6 +1518,34 @@
       if (lightbox.classList.contains('open')) return;
       if (e.key === 'ArrowLeft') document.getElementById('c-prev').click();
       if (e.key === 'ArrowRight') document.getElementById('c-next').click();
+    });
+
+    // Design gallery
+    const designs = [
+      // 把匯出的圖片路徑加在這裡，例如：
+      // 'assets/design/01.jpg',
+      // 'assets/design/02.jpg',
+    ];
+    const dgGrid = document.getElementById('design-grid');
+    if (designs.length) {
+      dgGrid.innerHTML = designs.map((src, i) =>
+        `<div class="dg-item fi" data-src="${src}"><img src="${src}" alt="作品 ${i+1}" loading="lazy"></div>`
+      ).join('');
+      document.querySelectorAll('#design-grid .fi').forEach(el => io.observe(el));
+    }
+    const imgLb = document.createElement('div');
+    imgLb.className = 'img-lb';
+    imgLb.innerHTML = '<img id="img-lb-img" src="" alt="">';
+    document.body.appendChild(imgLb);
+    dgGrid.addEventListener('click', e => {
+      const item = e.target.closest('.dg-item');
+      if (!item) return;
+      document.getElementById('img-lb-img').src = item.dataset.src;
+      imgLb.classList.add('open');
+    });
+    imgLb.addEventListener('click', () => imgLb.classList.remove('open'));
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') imgLb.classList.remove('open');
     });
 
     // Contact form success message
