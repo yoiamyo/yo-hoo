@@ -247,21 +247,54 @@
     }
 
     /* ── SOCIAL ── */
-    .social-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
+    .shelf-outer {
+      overflow: hidden;
+      -webkit-mask: linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%);
+      mask: linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%);
       margin-top: 2.5rem;
     }
 
+    .shelf-track {
+      display: flex;
+      gap: 1.25rem;
+      transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
+      will-change: transform;
+      padding: 0.25rem 0;
+    }
+
+    .shelf-nav {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .shelf-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--dim);
+      padding: 0.55rem 1.5rem;
+      font-family: var(--font);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .shelf-btn:hover { color: var(--text); border-color: #444; }
+
     .social-card {
+      flex-shrink: 0;
+      width: 195px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 2rem 1.5rem;
+      padding: 1.75rem 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1rem;
       text-decoration: none;
       color: var(--text);
       transition: border-color 0.3s, background 0.3s;
@@ -290,6 +323,7 @@
     }
 
     .social-avatar img.pad-sm  { padding: 14px; }
+    .social-avatar img.pad-lg  { padding: 18px; }
     .social-avatar img.pad-none { padding: 0; }
 
     .social-avatar span {
@@ -330,7 +364,7 @@
     .social-card:hover .social-cta { color: var(--text); }
 
     @media (max-width: 768px) {
-      .social-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .social-card { width: 158px; padding: 1.25rem 1rem; }
     }
 
     /* ── CLIENTS ── */
@@ -998,107 +1032,14 @@
   <section id="social">
     <p class="s-label fi">Social Media Management</p>
     <h2 class="section-title fi">社群行銷</h2>
-    <div class="social-grid">
-
-      <a class="social-card fi" href="https://www.instagram.com/thekingofnightmarket/" target="_blank" rel="noopener">
-        <div class="social-avatar">
-          <img src="assets/logos/YSW.png" alt="夜市王">
-        </div>
-        <div>
-          <div class="social-handle">@thekingofnightmarket</div>
-        </div>
-        <div class="social-tag">社群企劃</div>
-        <div class="social-cta">View on Instagram →</div>
-      </a>
-
-      <a class="social-card fi" href="https://www.instagram.com/myschedule_ltd/" target="_blank" rel="noopener">
-        <div class="social-avatar">
-          <img src="assets/logos/MY.png" alt="我的檔期" class="pad-sm">
-        </div>
-        <div>
-          <div class="social-handle">@myschedule_ltd</div>
-        </div>
-        <div class="social-tag">社群企劃</div>
-        <div class="social-cta">View on Instagram →</div>
-      </a>
-
-      <a class="social-card fi" href="https://www.instagram.com/eclatduteint_tw/" target="_blank" rel="noopener">
-        <div class="social-avatar">
-          <img src="assets/logos/eclat.webp" alt="Éclat" class="pad-none">
-        </div>
-        <div>
-          <div class="social-handle">@eclatduteint_tw</div>
-        </div>
-        <div class="social-tag">品牌行銷</div>
-        <div class="social-cta">View on Instagram →</div>
-      </a>
-
-      <a class="social-card fi" href="https://www.instagram.com/mygopen/" target="_blank" rel="noopener">
-        <div class="social-avatar">
-          <img src="assets/logos/MGP.png" alt="Mygopen">
-        </div>
-        <div>
-          <div class="social-handle">@mygopen</div>
-        </div>
-        <div class="social-tag">品牌行銷</div>
-        <div class="social-cta">View on Instagram →</div>
-      </a>
-
-      <a class="social-card fi" href="https://www.instagram.com/crypto_brain_bro/" target="_blank" rel="noopener">
-        <div class="social-avatar">
-          <img src="assets/logos/BB.png" alt="Crypto Brain Bro">
-        </div>
-        <div>
-          <div class="social-handle">@crypto_brain_bro</div>
-        </div>
-        <div class="social-tag">社群營運</div>
-        <div class="social-cta">View on Instagram →</div>
-      </a>
-
-      <a class="social-card fi" href="https://www.instagram.com/thisgroupofpeople/" target="_blank" rel="noopener">
-        <div class="social-avatar">
-          <img src="assets/logos/TGOP.png" alt="這群人 TGOP">
-        </div>
-        <div>
-          <div class="social-handle">@thisgroupofpeople</div>
-        </div>
-        <div class="social-tag">品牌行銷</div>
-        <div class="social-cta">View on Instagram →</div>
-      </a>
-
-      <a class="social-card fi" href="https://www.instagram.com/monkeymonday_/" target="_blank" rel="noopener">
-        <div class="social-avatar">
-          <img src="assets/logos/MM.png" alt="Monkey Monday">
-        </div>
-        <div>
-          <div class="social-handle">@monkeymonday_</div>
-        </div>
-        <div class="social-tag">品牌營運</div>
-        <div class="social-cta">View on Instagram →</div>
-      </a>
-
-      <a class="social-card fi" href="https://www.instagram.com/martial_armour/" target="_blank" rel="noopener">
-        <div class="social-avatar">
-          <img src="assets/logos/MA.png" alt="Martial Armour">
-        </div>
-        <div>
-          <div class="social-handle">@martial_armour</div>
-        </div>
-        <div class="social-tag">品牌行銷</div>
-        <div class="social-cta">View on Instagram →</div>
-      </a>
-
-      <a class="social-card fi" href="https://www.instagram.com/rpsshooot/" target="_blank" rel="noopener">
-        <div class="social-avatar">
-          <img src="assets/logos/SHT.png" alt="rpsshooot">
-        </div>
-        <div>
-          <div class="social-handle">@rpsshooot</div>
-        </div>
-        <div class="social-tag">社群企劃</div>
-        <div class="social-cta">View on Instagram →</div>
-      </a>
-
+    <div class="fi">
+      <div class="shelf-outer">
+        <div class="shelf-track" id="shelf-track"></div>
+      </div>
+      <div class="shelf-nav">
+        <button class="shelf-btn" id="shelf-prev">← Prev</button>
+        <button class="shelf-btn" id="shelf-next">Next →</button>
+      </div>
     </div>
   </section>
 
@@ -1531,6 +1472,68 @@
       if (e.key === 'ArrowLeft') document.getElementById('c-prev').click();
       if (e.key === 'ArrowRight') document.getElementById('c-next').click();
     });
+
+    // Social shelf
+    const socialAccounts = [
+      { url: 'https://www.instagram.com/thekingofnightmarket/', handle: '@thekingofnightmarket', tag: '社群企劃', src: 'assets/logos/YSW.png' },
+      { url: 'https://www.instagram.com/myschedule_ltd/',       handle: '@myschedule_ltd',       tag: '社群企劃', src: 'assets/logos/MY.png',   imgClass: 'pad-sm' },
+      { url: 'https://www.instagram.com/eclatduteint_tw/',      handle: '@eclatduteint_tw',      tag: '品牌行銷', src: 'assets/logos/eclat.webp', imgClass: 'pad-none' },
+      { url: 'https://www.instagram.com/mygopen/',              handle: '@mygopen',              tag: '品牌行銷', src: 'assets/logos/MGP.png' },
+      { url: 'https://www.instagram.com/crypto_brain_bro/',     handle: '@crypto_brain_bro',     tag: '社群營運', src: 'assets/logos/BB.png' },
+      { url: 'https://www.instagram.com/thisgroupofpeople/',    handle: '@thisgroupofpeople',    tag: '品牌行銷', src: 'assets/logos/TGOP.png' },
+      { url: 'https://www.instagram.com/monkeymonday_/',        handle: '@monkeymonday_',        tag: '品牌營運', src: 'assets/logos/MM.png' },
+      { url: 'https://www.instagram.com/martial_armour/',       handle: '@martial_armour',       tag: '品牌行銷', src: 'assets/logos/MA.png' },
+      { url: 'https://www.instagram.com/rpsshooot/',            handle: '@rpsshooot',            tag: '社群企劃', src: 'assets/logos/SHT.png', imgClass: 'pad-lg' },
+    ];
+    const SN = socialAccounts.length;
+    const tripled = [...socialAccounts, ...socialAccounts, ...socialAccounts];
+    const shelfTrack = document.getElementById('shelf-track');
+    shelfTrack.innerHTML = tripled.map(a =>
+      `<a class="social-card" href="${a.url}" target="_blank" rel="noopener">
+        <div class="social-avatar"><img src="${a.src}" alt="${a.handle}" class="${a.imgClass||''}"></div>
+        <div><div class="social-handle">${a.handle}</div></div>
+        <div class="social-tag">${a.tag}</div>
+        <div class="social-cta">View on Instagram →</div>
+      </a>`
+    ).join('');
+
+    const CARD_STEP = () => {
+      const card = shelfTrack.querySelector('.social-card');
+      return card ? card.offsetWidth + 20 : 215;
+    };
+    let shelfIdx = SN;
+    let shelfAnimating = false;
+
+    function applyShelf(animated) {
+      shelfTrack.style.transition = animated ? 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)' : 'none';
+      shelfTrack.style.transform = `translateX(-${shelfIdx * CARD_STEP()}px)`;
+    }
+
+    function shelfGo(dir) {
+      if (shelfAnimating) return;
+      shelfAnimating = true;
+      shelfIdx += dir;
+      applyShelf(true);
+      setTimeout(() => {
+        if (shelfIdx <= 0) { shelfIdx += SN; applyShelf(false); }
+        else if (shelfIdx >= SN * 2) { shelfIdx -= SN; applyShelf(false); }
+        shelfAnimating = false;
+      }, 460);
+    }
+
+    document.getElementById('shelf-prev').addEventListener('click', () => shelfGo(-1));
+    document.getElementById('shelf-next').addEventListener('click', () => shelfGo(1));
+
+    // Touch swipe
+    let shelfTouchX = 0;
+    shelfTrack.addEventListener('touchstart', e => { shelfTouchX = e.touches[0].clientX; }, { passive: true });
+    shelfTrack.addEventListener('touchend', e => {
+      const delta = shelfTouchX - e.changedTouches[0].clientX;
+      if (Math.abs(delta) < 40) return;
+      shelfGo(delta > 0 ? 1 : -1);
+    }, { passive: true });
+
+    applyShelf(false);
 
     // Design gallery
     const designs = [
