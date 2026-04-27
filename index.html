@@ -1135,6 +1135,18 @@
       .nav-links { display: none; }
       section { padding: 4.5rem 1.5rem; }
       #hero { padding: 1.5rem 1.5rem 4rem; }
+
+      /* Mobile hero bg: zoom in on camera */
+      .hero-bg {
+        background-size: 220%;
+        background-position: 78% 38%;
+        -webkit-mask-image:
+          linear-gradient(to bottom, transparent 0%, black 18%, black 72%, transparent 96%);
+        -webkit-mask-composite: initial;
+        mask-image:
+          linear-gradient(to bottom, transparent 0%, black 18%, black 72%, transparent 96%);
+        mask-composite: initial;
+      }
       .about-grid { grid-template-columns: 1fr; gap: 2rem; }
       .about-stats { grid-template-columns: repeat(3,1fr); gap: 1rem; }
       .services-grid { grid-template-columns: 1fr; }
