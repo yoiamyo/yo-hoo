@@ -193,34 +193,34 @@
       position: absolute; inset: 0;
     }
 
-    /* Layer A — wider spacing, slower */
+    /* Layer A — wide spacing, slow */
     .tv-roll::before {
       background: repeating-linear-gradient(
         0deg,
-        transparent 0px, transparent 55px,
-        rgba(255,255,255,0.013) 55px, rgba(255,255,255,0.013) 57px
+        transparent 0px, transparent 90px,
+        rgba(255,255,255,0.012) 90px, rgba(255,255,255,0.012) 92px
       );
-      animation: tv-roll-a 11s linear infinite;
+      animation: tv-roll-a 14s linear infinite;
     }
 
-    /* Layer B — tighter spacing, faster, darker */
+    /* Layer B — medium spacing, different speed */
     .tv-roll::after {
       background: repeating-linear-gradient(
         0deg,
-        transparent 0px, transparent 37px,
-        rgba(0,0,0,0.016) 37px, rgba(0,0,0,0.016) 39px
+        transparent 0px, transparent 65px,
+        rgba(0,0,0,0.015) 65px, rgba(0,0,0,0.015) 67px
       );
-      animation: tv-roll-b 7s linear infinite;
+      animation: tv-roll-b 9s linear infinite;
     }
 
     @keyframes tv-roll-a {
       from { background-position: 0 0; }
-      to   { background-position: 0 114px; }
+      to   { background-position: 0 184px; }
     }
 
     @keyframes tv-roll-b {
       from { background-position: 0 0; }
-      to   { background-position: 0 76px; }
+      to   { background-position: 0 132px; }
     }
 
     /* TV signal pulse */
