@@ -157,14 +157,23 @@
 
     /* Background graphic */
     .hero-bg {
-      position: absolute; inset: 0; z-index: 0;
+      position: absolute;
+      top: -80px; left: 0; right: 0; bottom: 0;
+      z-index: 0;
       background-image: url('assets/yohooo-graphic.png');
-      background-size: auto 90%;
-      background-position: right center;
+      background-size: auto 105%;
+      background-position: right top;
       background-repeat: no-repeat;
       opacity: 0.32;
-      -webkit-mask: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 40%, black 65%);
-      mask: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 40%, black 65%);
+      /* Fade: left side + bottom */
+      -webkit-mask-image:
+        linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 38%, black 62%),
+        linear-gradient(to bottom, black 45%, transparent 88%);
+      -webkit-mask-composite: destination-in;
+      mask-image:
+        linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 38%, black 62%),
+        linear-gradient(to bottom, black 45%, transparent 88%);
+      mask-composite: intersect;
     }
 
     /* Vignette */
