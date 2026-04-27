@@ -157,22 +157,20 @@
 
     /* Background graphic */
     .hero-bg {
-      position: absolute;
-      top: -80px; left: 0; right: 0; bottom: 0;
-      z-index: 0;
+      position: absolute; inset: 0; z-index: 0;
       background-image: url('assets/yohooo-graphic.png');
-      background-size: auto 105%;
-      background-position: right top;
+      background-size: auto 75%;
+      background-position: right center;
       background-repeat: no-repeat;
-      opacity: 0.32;
-      /* Fade: left side + bottom */
+      opacity: 0.35;
+      /* Fade: left gap + bottom edge */
       -webkit-mask-image:
-        linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 38%, black 62%),
-        linear-gradient(to bottom, black 45%, transparent 88%);
+        linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 35%, black 58%),
+        linear-gradient(to bottom, black 50%, transparent 92%);
       -webkit-mask-composite: destination-in;
       mask-image:
-        linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 38%, black 62%),
-        linear-gradient(to bottom, black 45%, transparent 88%);
+        linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 35%, black 58%),
+        linear-gradient(to bottom, black 50%, transparent 92%);
       mask-composite: intersect;
     }
 
