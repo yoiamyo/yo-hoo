@@ -337,6 +337,14 @@
       margin-bottom: 0.75rem;
     }
 
+    .s-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 2.5rem;
+    }
+    .s-header .s-label { margin-bottom: 0; }
+
     .section-title {
       font-size: 2rem;
       font-weight: 700;
@@ -401,39 +409,44 @@
     /* ── SERVICES ── */
     .services-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      border: 1px solid var(--border);
-      gap: 1px;
-      background: var(--border);
+      grid-template-columns: repeat(4, 1fr);
+      border-left: 1px solid var(--border);
     }
 
     .svc {
-      background: var(--bg);
-      padding: 3rem;
+      padding: 2.5rem 2rem 3rem;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
       transition: background 0.3s;
     }
 
     .svc:hover { background: var(--surface); }
 
     .svc-num {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      color: var(--dim);
-      margin-bottom: 2.5rem;
+      font-family: var(--serif);
+      font-size: 4.5rem;
+      font-weight: 900;
+      font-style: italic;
+      color: rgba(232,224,212,0.07);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.4rem;
     }
 
     .svc-title {
-      font-size: 1.4rem;
+      font-size: 0.72rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 1rem;
+      letter-spacing: 0.14em;
+      color: var(--text);
+      margin-bottom: 0.9rem;
     }
 
     .svc-desc {
-      font-size: 0.88rem;
+      font-size: 0.7rem;
       color: var(--dim);
-      line-height: 1.8;
+      line-height: 1.85;
+      letter-spacing: 0.02em;
     }
 
     /* ── SOCIAL ── */
@@ -1152,7 +1165,9 @@
       }
       .about-grid { grid-template-columns: 1fr; gap: 2rem; }
       .about-stats { grid-template-columns: repeat(3,1fr); gap: 1rem; }
-      .services-grid { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .svc-num { font-size: 3rem; }
+      .svc { padding: 1.5rem 1.2rem 2rem; }
       .work-grid { grid-template-columns: repeat(2, 1fr); }
       .design-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
 footer { flex-direction: column; gap: 0.75rem; text-align: center; }
@@ -1266,27 +1281,30 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
 
   <!-- SERVICES -->
   <section id="services">
-    <p class="s-label fi">Services</p>
+    <div class="s-header fi">
+      <p class="s-label">Services</p>
+      <span class="s-label" style="opacity:0.4">04 Categories</span>
+    </div>
     <div class="services-grid">
       <div class="svc fi">
         <p class="svc-num">01</p>
         <h3 class="svc-title">社群行銷</h3>
-        <p class="svc-desc">規劃社群內容方向與發文節奏，結合檔期操作與數據回饋，持續優化品牌在社群上的表現與曝光。</p>
+        <p class="svc-desc">內容策略規劃、帳號經營<br>數據分析、受眾增長</p>
       </div>
       <div class="svc fi">
         <p class="svc-num">02</p>
         <h3 class="svc-title">短影音製作</h3>
-        <p class="svc-desc">順應內容趨勢，短影音為製作核心，涵蓋腳本發想、拍攝執行與後期剪輯，同時支援各類影像內容製作，靈活對應不同需求。</p>
+        <p class="svc-desc">腳本開發、拍攝剪輯<br>Reels / TikTok / Shorts</p>
       </div>
       <div class="svc fi">
         <p class="svc-num">03</p>
         <h3 class="svc-title">平面設計</h3>
-        <p class="svc-desc">提供品牌與社群視覺設計，包含品牌識別、包裝設計與印刷應用，確保設計從畫面到實體呈現皆具專業品質與一致性。</p>
+        <p class="svc-desc">品牌視覺、貼文設計<br>廣告素材、形象包裝</p>
       </div>
       <div class="svc fi">
         <p class="svc-num">04</p>
         <h3 class="svc-title">自媒體顧問</h3>
-        <p class="svc-desc">協助創作者與藝人規劃帳號方向、內容定位與發文策略，建立清晰的個人品牌形象，提升社群影響力與商業合作價值。</p>
+        <p class="svc-desc">品牌定位、變現規劃<br>跨平台整合策略</p>
       </div>
     </div>
   </section>
