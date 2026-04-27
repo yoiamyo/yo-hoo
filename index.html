@@ -181,23 +181,46 @@
       pointer-events: none;
     }
 
-    /* TV rolling bands */
+    /* TV rolling bands — two layers at different spacing & speed */
     .tv-roll {
       position: absolute; inset: 0; z-index: 5;
       pointer-events: none;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent 0px, transparent 60px,
-        rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 62px,
-        transparent 62px, transparent 120px,
-        rgba(0,0,0,0.018) 120px, rgba(0,0,0,0.018) 122px
-      );
-      animation: tv-roll 10s linear infinite;
     }
 
-    @keyframes tv-roll {
+    .tv-roll::before,
+    .tv-roll::after {
+      content: '';
+      position: absolute; inset: 0;
+    }
+
+    /* Layer A — wider spacing, slower */
+    .tv-roll::before {
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px, transparent 55px,
+        rgba(255,255,255,0.013) 55px, rgba(255,255,255,0.013) 57px
+      );
+      animation: tv-roll-a 11s linear infinite;
+    }
+
+    /* Layer B — tighter spacing, faster, darker */
+    .tv-roll::after {
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px, transparent 37px,
+        rgba(0,0,0,0.016) 37px, rgba(0,0,0,0.016) 39px
+      );
+      animation: tv-roll-b 7s linear infinite;
+    }
+
+    @keyframes tv-roll-a {
       from { background-position: 0 0; }
-      to   { background-position: 0 240px; }
+      to   { background-position: 0 114px; }
+    }
+
+    @keyframes tv-roll-b {
+      from { background-position: 0 0; }
+      to   { background-position: 0 76px; }
     }
 
     /* TV signal pulse */
