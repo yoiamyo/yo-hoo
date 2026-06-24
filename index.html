@@ -42,21 +42,6 @@
       width: 100%; height: 100%;
     }
 
-    /* Global CRT scanlines */
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.08) 2px,
-        rgba(0,0,0,0.08) 4px
-      );
-      pointer-events: none;
-      z-index: 9998;
-    }
-
     /* Global warm fog */
     body::before {
       content: '';
@@ -140,21 +125,6 @@
       z-index: 0;
     }
 
-    /* CRT scanlines */
-    #hero::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.07) 2px,
-        rgba(0,0,0,0.07) 4px
-      );
-      pointer-events: none;
-      z-index: 3;
-    }
-
     /* Background graphic */
     .hero-bg {
       position: absolute; inset: 0; z-index: 0;
@@ -181,62 +151,6 @@
       pointer-events: none;
     }
 
-    /* TV rolling bands — two layers at different spacing & speed */
-    .tv-roll {
-      position: absolute; inset: 0; z-index: 5;
-      pointer-events: none;
-    }
-
-    .tv-roll::before,
-    .tv-roll::after {
-      content: '';
-      position: absolute; inset: 0;
-    }
-
-    /* Layer A — wide spacing, slow */
-    .tv-roll::before {
-      background: repeating-linear-gradient(
-        0deg,
-        transparent 0px, transparent 90px,
-        rgba(255,255,255,0.012) 90px, rgba(255,255,255,0.012) 92px
-      );
-      animation: tv-roll-a 14s linear infinite;
-    }
-
-    /* Layer B — medium spacing, different speed */
-    .tv-roll::after {
-      background: repeating-linear-gradient(
-        0deg,
-        transparent 0px, transparent 65px,
-        rgba(0,0,0,0.015) 65px, rgba(0,0,0,0.015) 67px
-      );
-      animation: tv-roll-b 9s linear infinite;
-    }
-
-    @keyframes tv-roll-a {
-      from { background-position: 0 0; }
-      to   { background-position: 0 184px; }
-    }
-
-    @keyframes tv-roll-b {
-      from { background-position: 0 0; }
-      to   { background-position: 0 132px; }
-    }
-
-    /* TV signal pulse */
-    .tv-pulse {
-      position: absolute; inset: 0; z-index: 3;
-      pointer-events: none;
-      background: transparent;
-      animation: tv-pulse 12s ease-in-out infinite;
-    }
-
-    @keyframes tv-pulse {
-      0%,49%,51%,79%,81%,100% { opacity: 0; }
-      50% { opacity: 1; background: rgba(255,255,255,0.012); }
-      80% { opacity: 1; background: rgba(0,0,0,0.025); }
-    }
-
     /* Film grain */
     .hero-grain {
       position: absolute; inset: 0; z-index: 1;
@@ -247,15 +161,6 @@
     /* Hero content sits above all overlays */
     .hero-content {
       position: relative; z-index: 4;
-      animation: tv-jitter 7s steps(1) infinite;
-    }
-
-    @keyframes tv-jitter {
-      0%,94%,100% { transform: translateX(0); filter: none; }
-      95%  { transform: translateX(-1.5px); filter: brightness(1.02); }
-      96%  { transform: translateX(1px);    filter: brightness(0.98); }
-      97%  { transform: translateX(-0.5px); filter: brightness(1.01); }
-      98%  { transform: translateX(0);      filter: none; }
     }
 
     .hero-label {
@@ -276,9 +181,7 @@
       margin-bottom: 2.5rem;
       text-shadow:
         0 0 20px rgba(232,200,150,0.4),
-        0 0 60px rgba(220,180,100,0.15),
-        2px 0 0 rgba(255,80,80,0.12),
-        -2px 0 0 rgba(80,150,255,0.1);
+        0 0 60px rgba(220,180,100,0.15);
     }
 
     .hero-title span { display: block; }
@@ -288,9 +191,7 @@
       color: var(--gold);
       text-shadow:
         0 0 25px rgba(232,200,100,0.7),
-        0 0 70px rgba(232,200,100,0.3),
-        2px 0 0 rgba(255,80,80,0.2),
-        -2px 0 0 rgba(80,150,255,0.15);
+        0 0 70px rgba(232,200,100,0.3);
     }
 
     .hero-foot {
@@ -1213,9 +1114,6 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     <div class="hero-bg"></div>
     <!-- Vignette -->
     <div class="hero-vignette"></div>
-    <!-- TV wave effects -->
-    <div class="tv-roll"></div>
-    <div class="tv-pulse"></div>
     <!-- Film grain -->
     <svg class="hero-grain" preserveAspectRatio="xMidYMid slice">
       <defs>
