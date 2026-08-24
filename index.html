@@ -299,6 +299,10 @@
         0 0 50px rgba(220,180,100,0.1);
     }
 
+    .stat-num .unit {
+      font-size: 0.55em;
+    }
+
     .stat-label {
       font-size: 0.72rem;
       letter-spacing: 0.15em;
@@ -1165,7 +1169,7 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
             <div class="stat-label">短影音製作</div>
           </div>
           <div>
-            <div class="stat-num">千萬+</div>
+            <div class="stat-num">10<span class="unit">M</span>+</div>
             <div class="stat-label">累積觀看</div>
           </div>
         </div>
@@ -1383,6 +1387,50 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
 
     // Carousel with categories
     const allReels = [
+      { url: 'https://www.instagram.com/reel/DcD2dPqhvaq/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/Dbdg-OFhKwQ/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DbXy_UDDtbF/', cat: '創作者' },
+      { url: 'https://www.instagram.com/reel/DbVpqpoyF_Y/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DasbieutNha/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaiGVmojcjk/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DbKVRGDjaSq/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DbGCjt1StLp/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/Dauf_2uhxXU/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DapVd5Ytf2M/', cat: '活動' },
+      { url: 'https://www.instagram.com/reel/DanEeL0ppqO/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DakbEn4hsQz/', cat: '藝人' },
+      { url: 'https://www.instagram.com/p/DahwPlcxePQ/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaAmTxoJIi7/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DadCWo9prfb/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaFWum1SoxJ/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaFqND3yD7Y/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaFuwZzyNU6/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaF0QK9ScaD/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaF3-7mSaM8/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaF9gAzyMVt/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaGAk9Wy6mX/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaGEmNkydi1/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaGJ8r2SrYm/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaGLcKmy2ao/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaGMSrTSfRG/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DaGMr4fSofb/', cat: '藝人' },
+      { url: 'https://www.instagram.com/p/DZ9kOl8RAwu/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DZhnpm9BsK-/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/DZFPgBJE1pO/', cat: '創作者' },
+      { url: 'https://www.instagram.com/reel/DX_jqDKDLig/', cat: '創作者' },
+      { url: 'https://www.instagram.com/reel/DXBOHMKCWXs/', cat: '創作者' },
+      { url: 'https://www.instagram.com/reel/DY6JhQLJ5xP/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DY4VKY_JCFI/', cat: '藝人' },
+      { url: 'https://www.instagram.com/reel/DY12KgLjx3W/', cat: '創作者' },
+      { url: 'https://www.instagram.com/reel/DYt5_DtSa_7/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/DV-605vD9kG/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DXg3l8vk8rs/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DYQ9vaPiaWZ/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DYOnJa9mvnF/', cat: '品牌' },
+      { url: 'https://www.instagram.com/reel/DLwDelvyiIS/', cat: '節目' },
+      { url: 'https://www.instagram.com/reel/DNw2UPV5vR3/', cat: '創作者' },
+      { url: 'https://www.instagram.com/reel/DPTXmV0E0oI/', cat: '創作者' },
+      { url: 'https://www.instagram.com/reel/DTPuPneE9ld/', cat: '創作者' },
       { url: 'https://www.instagram.com/reel/DTUlGCQk5Tp/', cat: '節目' },
       { url: 'https://www.instagram.com/reel/DXbxvEPk6Qi/', cat: '創作者' },
       { url: 'https://www.instagram.com/reel/DXRiN_sjKCb/', cat: '創作者' },
