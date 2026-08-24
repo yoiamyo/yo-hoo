@@ -595,6 +595,99 @@
       justify-content: center;
     }
 
+    .reel-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .reel-row {
+      overflow: hidden;
+      position: relative;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    }
+
+    .reel-track {
+      display: flex;
+      gap: 14px;
+      width: max-content;
+    }
+
+    .reel-track.spin-l { animation: reelScrollL 60s linear infinite; }
+    .reel-track.spin-r { animation: reelScrollR 68s linear infinite; }
+    .reel-track.spin-l.slow { animation-duration: 110s; }
+    .reel-track.spin-r.slow { animation-duration: 125s; }
+    .reel-rows:hover .reel-track { animation-play-state: paused; }
+
+    @keyframes reelScrollL { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes reelScrollR { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+    .reel-cell {
+      position: relative;
+      width: 160px;
+      aspect-ratio: 9 / 16;
+      flex-shrink: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94), border-color 0.3s;
+    }
+
+    .reel-cell:hover {
+      transform: scale(1.06);
+      z-index: 2;
+      border-color: #333;
+    }
+
+    .reel-cell img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: filter 0.3s;
+    }
+
+    .reel-cell:hover img { filter: brightness(1.08); }
+
+    .reel-cell::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.6));
+      opacity: 0.55;
+      transition: opacity 0.3s;
+    }
+
+    .reel-cell:hover::after { opacity: 0.2; }
+
+    .reel-play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .reel-cell:hover .reel-play { opacity: 1; }
+
+    .reel-play svg {
+      width: 26px;
+      height: 26px;
+      fill: #fff;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+    }
+
+    @media (max-width: 640px) {
+      .reel-cell { width: 118px; }
+    }
+
     .c-card {
       position: absolute;
       left: 50%;
@@ -1212,10 +1305,9 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     <p class="s-label fi">Short Video Production</p>
     <h2 class="section-title fi">短影音製作</h2>
     <div class="work-tabs fi" id="work-tabs"></div>
-    <div class="carousel-stage fi" id="carousel"></div>
-    <div class="carousel-nav fi">
-      <button class="c-btn" id="c-prev">← Prev</button>
-      <button class="c-btn" id="c-next">Next →</button>
+    <div class="reel-rows fi" id="reel-rows">
+      <div class="reel-row" id="reel-row-1"><div class="reel-track" id="reel-track-1"></div></div>
+      <div class="reel-row" id="reel-row-2"><div class="reel-track" id="reel-track-2"></div></div>
     </div>
   </section>
 
@@ -1510,39 +1602,12 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
 
     const cats = ['全部', '藝人', '品牌', '節目', '創作者', '戲劇', '活動'];
     let activeFilter = '全部';
-    let activeIdx = Math.floor(Math.random() * allReels.length);
-    const carousel = document.getElementById('carousel');
-
-    // Featured reel shortcode per category
-    const featuredCode = {
-      '藝人':  'DHTLMQ_zU1M',
-      '品牌':  'DKmHzGQhFR_',
-      '節目':  'DP0X8kukruF',
-      '創作者': 'DXRiN_sjKCb',
-      '戲劇':  'DVf5-_UCedF',
-      '活動':  'DLc35eXSOzb',
-    };
-
-    function featuredIdx(filtered, cat) {
-      const code = featuredCode[cat];
-      if (!code) return Math.floor(filtered.length / 2);
-      const idx = filtered.findIndex(r => r.url.includes(code));
-      return idx >= 0 ? idx : Math.floor(filtered.length / 2);
-    }
-
-    // Build tabs
-    const tabsEl = document.getElementById('work-tabs');
-    tabsEl.innerHTML = cats.map(c =>
-      `<button class="tab-btn${c === activeFilter ? ' active' : ''}" data-cat="${c}">${c}</button>`
-    ).join('');
-
-    tabsEl.addEventListener('click', e => {
-      const btn = e.target.closest('.tab-btn');
-      if (!btn) return;
-      activeFilter = btn.dataset.cat;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === activeFilter));
-      renderCarousel();
-    });
+    // Reel rows: two auto-scrolling "marquee" rows when showing all works,
+    // collapsing to one row when a category is selected.
+    const ITEM_W = 160 + 14; // .reel-cell width + track gap
+    // A loop unit must clear this width so that, once duplicated for the
+    // seamless -50% scroll, one lap never shows an obvious repeat.
+    const MIN_LOOP_WIDTH = 2800;
 
     function getFiltered() {
       return activeFilter === '全部' ? allReels : allReels.filter(r => r.cat === activeFilter);
@@ -1557,90 +1622,72 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
       return a;
     }
 
-    let currentFiltered = [];
-
-    function renderCarousel() {
-      const shuffled = shuffle(getFiltered());
-      // Place featured card at center
-      const code = featuredCode[activeFilter];
-      if (code) {
-        const fi = shuffled.findIndex(r => r.url.includes(code));
-        if (fi > 0) { // swap to front so activeIdx=0 centres it... actually set activeIdx to fi
-        activeIdx = fi;
-        } else {
-          activeIdx = 0;
-        }
-      } else {
-        activeIdx = Math.floor(Math.random() * shuffled.length);
-      }
-      currentFiltered = shuffled;
-      carousel.innerHTML = shuffled.map((r, i) => {
-        const c = r.url.match(/\/(reel|p)\/([^/?]+)/)?.[2] || '';
-        return `
-        <div class="c-card" data-url="${r.url}" data-idx="${i}">
-          <span class="c-num">${String(i+1).padStart(2,'0')}</span>
-          <img class="c-thumb" src="assets/thumbnails/${c}.jpg"
-               onerror="this.src='assets/no-thumbnail.png';this.closest('.c-card').classList.add('no-thumb')">
-          <div class="c-overlay">
-            <div class="play-btn">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-          </div>
-        </div>
-        `;
-      }).join('');
-      updateCarousel();
+    function cellHTML(r) {
+      const c = r.url.match(/\/(reel|p)\/([^/?]+)/)?.[2] || '';
+      return `
+        <div class="reel-cell" data-url="${r.url}">
+          <img src="assets/thumbnails/${c}.jpg" onerror="this.src='assets/no-thumbnail.png'">
+          <div class="reel-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>`;
     }
 
-    function updateCarousel() {
-      const len = currentFiltered.length;
-      document.querySelectorAll('.c-card').forEach(card => {
-        const idx = parseInt(card.dataset.idx);
-        let pos = idx - activeIdx;
-        if (pos >  Math.floor(len / 2)) pos -= len;
-        if (pos < -Math.floor(len / 2)) pos += len;
-        card.dataset.pos = pos;
-      });
+    // Repeats `list` enough times to clear MIN_LOOP_WIDTH, so a small
+    // category (e.g. 戲劇 with only a handful of works) scrolls as full
+    // and smooth as a large one instead of visibly looping 1-2 cards.
+    function fillToWidth(list) {
+      if (!list.length) return [];
+      const times = Math.max(1, Math.ceil(MIN_LOOP_WIDTH / (list.length * ITEM_W)));
+      const out = [];
+      for (let i = 0; i < times; i++) out.push(...list);
+      return out;
     }
 
-    renderCarousel();
+    function setTrack(trackId, list, dir, slow) {
+      const unit = fillToWidth(list);
+      const html = unit.map(cellHTML).join('');
+      const track = document.getElementById(trackId);
+      track.innerHTML = html + html; // duplicate the filled unit for a seamless loop
+      track.classList.remove('spin-l', 'spin-r', 'slow');
+      track.classList.add(dir === 'r' ? 'spin-r' : 'spin-l');
+      if (slow) track.classList.add('slow');
+    }
 
-    document.getElementById('c-prev').addEventListener('click', () => {
-      activeIdx = (activeIdx - 1 + currentFiltered.length) % currentFiltered.length;
-      updateCarousel();
-    });
-
-    document.getElementById('c-next').addEventListener('click', () => {
-      activeIdx = (activeIdx + 1) % currentFiltered.length;
-      updateCarousel();
-    });
-
-    // Touch swipe support
-    let touchStartX = 0;
-    carousel.addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].clientX;
-    }, { passive: true });
-    carousel.addEventListener('touchend', e => {
-      const delta = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(delta) < 40) return;
-      if (delta > 0) {
-        activeIdx = (activeIdx + 1) % currentFiltered.length;
+    function renderRows() {
+      const filtered = shuffle(getFiltered());
+      const row2El = document.getElementById('reel-row-2');
+      if (activeFilter === '全部') {
+        // Slower here specifically: with two rows both moving, full speed feels busier
+        // than a single row, so "全部" gets an easier, calmer pace than one category alone.
+        const half = Math.ceil(filtered.length / 2);
+        setTrack('reel-track-1', filtered.slice(0, half), 'l', true);
+        setTrack('reel-track-2', filtered.slice(half), 'r', true);
+        row2El.style.display = '';
       } else {
-        activeIdx = (activeIdx - 1 + currentFiltered.length) % currentFiltered.length;
+        setTrack('reel-track-1', filtered, 'l');
+        row2El.style.display = 'none';
       }
-      updateCarousel();
-    }, { passive: true });
+    }
 
-    carousel.addEventListener('click', e => {
-      const card = e.target.closest('.c-card');
-      if (!card) return;
-      const pos = parseInt(card.dataset.pos);
-      if (pos !== 0) {
-        activeIdx = parseInt(card.dataset.idx);
-        updateCarousel();
-        return;
-      }
-      openLightbox(card, card.dataset.url);
+    // Build tabs
+    const tabsEl = document.getElementById('work-tabs');
+    tabsEl.innerHTML = cats.map(c =>
+      `<button class="tab-btn${c === activeFilter ? ' active' : ''}" data-cat="${c}">${c}</button>`
+    ).join('');
+
+    tabsEl.addEventListener('click', e => {
+      const btn = e.target.closest('.tab-btn');
+      if (!btn) return;
+      activeFilter = btn.dataset.cat;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === activeFilter));
+      renderRows();
+    });
+
+    renderRows();
+
+    document.getElementById('reel-rows').addEventListener('click', e => {
+      const cell = e.target.closest('.reel-cell');
+      if (!cell) return;
+      openLightbox(cell, cell.dataset.url);
     });
 
     // Lightbox (expand from card)
@@ -1699,13 +1746,6 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     document.getElementById('lb-close').addEventListener('click', closeLightbox);
     lbBg.addEventListener('click', closeLightbox);
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
-
-    // Keyboard arrow navigation
-    document.addEventListener('keydown', e => {
-      if (lightbox.classList.contains('open')) return;
-      if (e.key === 'ArrowLeft') document.getElementById('c-prev').click();
-      if (e.key === 'ArrowRight') document.getElementById('c-next').click();
-    });
 
     // Social shelf
     const socialAccounts = [
