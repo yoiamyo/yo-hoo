@@ -981,125 +981,195 @@
 
     .ft-links a:hover { color: var(--text); }
 
-    /* ── DESIGN ── */
-    .design-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
+    /* ── DESIGN (cassette carousel) ── */
+    .dc-stage {
+      position: relative;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-top: 2.5rem;
     }
 
-    .dg-item {
-      cursor: pointer;
-      overflow: hidden;
-      border-radius: 4px;
-      aspect-ratio: 3 / 4;
+    .dc-card {
+      position: absolute;
+      left: 50%;
+      width: 380px;
+      aspect-ratio: 3 / 2;
       background: var(--surface);
       border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94),
+                  opacity 0.55s ease,
+                  border-color 0.3s;
     }
 
-    .dg-item img {
+    .dc-card[data-pos="0"] {
+      transform: translateX(-50%) scale(1);
+      opacity: 1;
+      z-index: 3;
+      border-color: #333;
+    }
+    .dc-card[data-pos="-1"] {
+      transform: translateX(calc(-50% - 340px)) scale(0.72);
+      opacity: 0.45;
+      z-index: 2;
+    }
+    .dc-card[data-pos="1"] {
+      transform: translateX(calc(-50% + 340px)) scale(0.72);
+      opacity: 0.45;
+      z-index: 2;
+    }
+    .dc-card[data-pos="-2"] {
+      transform: translateX(calc(-50% - 610px)) scale(0.5);
+      opacity: 0.16;
+      z-index: 1;
+    }
+    .dc-card[data-pos="2"] {
+      transform: translateX(calc(-50% + 610px)) scale(0.5);
+      opacity: 0.16;
+      z-index: 1;
+    }
+    .dc-card:not([data-pos="-2"]):not([data-pos="-1"]):not([data-pos="0"]):not([data-pos="1"]):not([data-pos="2"]) {
+      transform: translateX(-50%) scale(0);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .dc-thumb {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      opacity: 0.85;
-      transition: transform 0.4s ease, opacity 0.3s;
+      filter: brightness(0.94);
+      transition: filter 0.3s, transform 6s ease;
+    }
+    .dc-card[data-pos="0"]:hover .dc-thumb {
+      filter: brightness(1.04);
+      transform: scale(1.035);
     }
 
-    .dg-item:hover img { transform: scale(1.04); opacity: 1; }
-
-    .design-wip {
-      margin-top: 2.5rem;
-      border: 1px solid rgba(232,200,120,0.18);
-      border-radius: 4px;
-      overflow: hidden;
-      position: relative;
-      background: #0d0b09;
+    .dc-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.05) 45%, rgba(0,0,0,0.75) 100%);
     }
 
-    /* Film strip perforation bar */
-    .wip-tape {
-      height: 22px;
-      background: #0a0806;
-      border-bottom: 1px solid rgba(232,200,120,0.1);
+    .dc-num {
+      position: absolute;
+      top: 0.9rem;
+      left: 1.1rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.65);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dc-label {
+      position: absolute;
+      left: 1.1rem;
+      right: 1.1rem;
+      bottom: 0.9rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.01em;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .dc-card[data-pos="-1"] .dc-label,
+    .dc-card[data-pos="1"] .dc-label,
+    .dc-card[data-pos="-2"] .dc-label,
+    .dc-card[data-pos="2"] .dc-label { opacity: 0; }
+
+    .dc-zoom {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 46px; height: 46px;
+      border: 1.5px solid rgba(255,255,255,0.75);
+      border-radius: 50%;
       display: flex;
       align-items: center;
-      padding: 0 0.75rem;
-      gap: 5px;
+      justify-content: center;
+      opacity: 0;
+      transform: translate(-50%,-50%) scale(0.85);
+      transition: opacity 0.25s, transform 0.25s, background 0.2s;
     }
-    .wip-tape:last-child {
-      border-bottom: none;
-      border-top: 1px solid rgba(232,200,120,0.1);
+    .dc-card[data-pos="0"]:hover .dc-zoom {
+      opacity: 1;
+      transform: translate(-50%,-50%) scale(1);
+      background: rgba(255,255,255,0.12);
     }
-    .wip-tape::before {
-      content: '';
-      display: block;
-      flex: 1;
-      height: 10px;
-      background: repeating-linear-gradient(
-        to right,
-        transparent 0px, transparent 4px,
-        rgba(232,200,120,0.18) 4px, rgba(232,200,120,0.18) 12px,
-        transparent 12px, transparent 18px
-      );
-      border-radius: 1px;
+    .dc-zoom svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 1.6; }
+
+    .dc-deck {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.75rem;
+      margin-top: 2.75rem;
     }
 
-    .wip-body {
+    .dc-btn {
+      font-family: var(--font);
       background: transparent;
-      padding: 3.5rem 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.25rem;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      padding: 0.55rem 1.1rem;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .dc-btn:hover { color: var(--gold); border-color: #444; }
+
+    .dc-counter {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.08em;
+      font-size: 0.85rem;
+      color: rgba(232,224,212,0.55);
+      background: #0d0b09;
+      border: 1px solid rgba(232,200,120,0.18);
+      border-radius: 3px;
+      padding: 0.5rem 0.9rem;
+      min-width: 92px;
       text-align: center;
     }
+    .dc-counter .cur { color: var(--gold); }
 
-    .wip-emoji {
-      font-size: 2.4rem;
-      animation: wip-bob 2.4s ease-in-out infinite;
-      filter: sepia(0.4);
-    }
-
-    @keyframes wip-bob {
-      0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
-      50%       { transform: translateY(-6px) scale(1.05); opacity: 1; }
-    }
-
-    .wip-title {
+    .dc-caption {
+      text-align: center;
+      margin-top: 1.4rem;
       font-family: var(--serif);
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--gold);
-      text-shadow: 0 0 20px rgba(232,200,100,0.4);
+      font-size: 1.05rem;
+      color: rgba(232,224,212,0.85);
+      letter-spacing: 0.01em;
+      min-height: 1.6em;
+      transition: opacity 0.25s;
     }
 
-    .wip-sub {
-      font-size: 0.75rem;
-      color: rgba(232,224,212,0.35);
-      line-height: 1.8;
-      max-width: 320px;
-      letter-spacing: 0.02em;
+    .dc-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 1.4rem;
+      flex-wrap: wrap;
+      max-width: 460px;
+      margin-left: auto;
+      margin-right: auto;
     }
-
-    .wip-dots span {
-      display: inline-block;
-      width: 4px; height: 4px;
+    .dc-dot {
+      width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--gold);
-      margin: 0 3px;
-      opacity: 0.4;
-      animation: wip-dot 1.4s ease-in-out infinite;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
     }
-    .wip-dots span:nth-child(2) { animation-delay: 0.25s; }
-    .wip-dots span:nth-child(3) { animation-delay: 0.5s; }
-
-    @keyframes wip-dot {
-      0%, 80%, 100% { transform: scale(0.7); opacity: 0.25; }
-      40%            { transform: scale(1.1); opacity: 0.9; }
-    }
+    .dc-dot.on { background: var(--gold); transform: scale(1.3); }
 
     .img-lb {
       position: fixed;
@@ -1121,9 +1191,24 @@
 
     .img-lb img {
       max-width: min(90vw, 860px);
-      max-height: 90vh;
+      max-height: 82vh;
       object-fit: contain;
       border-radius: 4px;
+      cursor: default;
+    }
+
+    .img-lb figure {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .img-lb figcaption {
+      font-family: var(--serif);
+      font-size: 1rem;
+      color: var(--gold);
       cursor: default;
     }
 
@@ -1163,7 +1248,13 @@
       .svc-num { font-size: 3rem; }
       .svc { padding: 1.5rem 1.2rem 2rem; }
       .work-grid { grid-template-columns: repeat(2, 1fr); }
-      .design-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+      .dc-stage { height: 260px; }
+      .dc-card { width: 250px; }
+      .dc-card[data-pos="-1"] { transform: translateX(calc(-50% - 175px)) scale(0.7); }
+      .dc-card[data-pos="1"]  { transform: translateX(calc(-50% + 175px)) scale(0.7); }
+      .dc-card[data-pos="-2"] { transform: translateX(calc(-50% - 300px)) scale(0.48); opacity: 0.12; }
+      .dc-card[data-pos="2"]  { transform: translateX(calc(-50% + 300px)) scale(0.48); opacity: 0.12; }
+      .dc-deck { gap: 1rem; }
 footer { flex-direction: column; gap: 0.75rem; text-align: center; }
       .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
 
@@ -1337,7 +1428,16 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
   <section id="design">
     <p class="s-label fi">Graphic Design</p>
     <h2 class="section-title fi">平面設計</h2>
-    <div class="design-grid" id="design-grid"></div>
+    <div class="fi">
+      <div class="dc-stage" id="dc-stage"></div>
+      <div class="dc-deck">
+        <button class="dc-btn" id="dc-prev">← Prev</button>
+        <div class="dc-counter"><span class="cur" id="dc-cur">01</span> / <span id="dc-total">18</span></div>
+        <button class="dc-btn" id="dc-next">Next →</button>
+      </div>
+      <p class="dc-caption" id="dc-caption"></p>
+      <div class="dc-dots" id="dc-dots"></div>
+    </div>
   </section>
 
   <!-- CLIENTS -->
@@ -1809,45 +1909,113 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
 
     applyShelf(false);
 
-    // Design gallery
-    const designs = [
-      // 把匯出的圖片路徑加在這裡，例如：
-      // 'assets/design/01.jpg',
-      // 'assets/design/02.jpg',
+    // Design carousel
+    const designWorks = [
+      { file: 'assets/design/01.jpg', title: '花閑 KAKAN', sub: '品牌包裝設計' },
+      { file: 'assets/design/02.jpg', title: 'PLEIADES', sub: '黑膠唱片包裝設計' },
+      { file: 'assets/design/03.jpg', title: 'PLEIADES', sub: '黑膠唱片包裝設計' },
+      { file: 'assets/design/04.jpg', title: 'Providencia Cigars', sub: '禮盒包裝設計' },
+      { file: 'assets/design/05.jpg', title: 'Kelly Huang Jewelry', sub: '品牌包裝設計' },
+      { file: 'assets/design/06.jpg', title: 'Kelly Huang Jewelry', sub: '卡片信封設計' },
+      { file: 'assets/design/07.jpg', title: '晁達 CHEN DA', sub: '燙金名片設計' },
+      { file: 'assets/design/08.jpg', title: 'Providencia Cigars', sub: '禮盒包裝設計' },
+      { file: 'assets/design/09.jpg', title: 'Kelly Huang Jewelry', sub: '品牌壓紋設計' },
+      { file: 'assets/design/10.jpg', title: '豐 Forward Music', sub: '品牌名片設計' },
+      { file: 'assets/design/11.jpg', title: 'Stacey Wei', sub: '黑膠專輯包裝設計' },
+      { file: 'assets/design/12.jpg', title: 'Stacey Wei', sub: '黑膠專輯包裝設計' },
+      { file: 'assets/design/13.jpg', title: 'Stacey Wei', sub: '黑膠唱片封面設計' },
+      { file: 'assets/design/14.jpg', title: '留白之聲', sub: '黑膠唱片封面設計' },
+      { file: 'assets/design/15.jpg', title: '花閑 KAKAN', sub: '杯墊圖像設計' },
+      { file: 'assets/design/16.jpg', title: '花閑 KAKAN', sub: '杯墊圖像設計' },
+      { file: 'assets/design/17.jpg', title: '玉天璽', sub: '名片設計' },
+      { file: 'assets/design/18.jpg', title: '豐 Forward Music', sub: '品牌識別設計' },
     ];
-    const dgGrid = document.getElementById('design-grid');
-    if (designs.length) {
-      dgGrid.innerHTML = designs.map((src, i) =>
-        `<div class="dg-item fi" data-src="${src}"><img src="${src}" alt="作品 ${i+1}" loading="lazy"></div>`
-      ).join('');
-      document.querySelectorAll('#design-grid .fi').forEach(el => io.observe(el));
-    } else {
-      dgGrid.outerHTML = `<div class="design-wip fi" id="design-wip">
-        <div class="wip-tape"></div>
-        <div class="wip-body">
-          <div class="wip-emoji">🎞️</div>
-          <div class="wip-title">Coming Soon</div>
-          <p class="wip-sub">平面設計作品集正在整理中，<br>很快就會上線。</p>
-          <div class="wip-dots"><span></span><span></span><span></span></div>
-        </div>
-        <div class="wip-tape"></div>
-      </div>`;
-      io.observe(document.getElementById('design-wip'));
-    }
+
     const imgLb = document.createElement('div');
     imgLb.className = 'img-lb';
-    imgLb.innerHTML = '<img id="img-lb-img" src="" alt="">';
+    imgLb.innerHTML = '<figure><img id="img-lb-img" src="" alt=""><figcaption id="img-lb-cap"></figcaption></figure>';
     document.body.appendChild(imgLb);
-    dgGrid.addEventListener('click', e => {
-      const item = e.target.closest('.dg-item');
-      if (!item) return;
-      document.getElementById('img-lb-img').src = item.dataset.src;
-      imgLb.classList.add('open');
-    });
     imgLb.addEventListener('click', () => imgLb.classList.remove('open'));
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') imgLb.classList.remove('open');
     });
+
+    let dcIdx = 0;
+    let dcAutoTimer = null;
+    const dcStage = document.getElementById('dc-stage');
+    const dcDots = document.getElementById('dc-dots');
+    const dcCaption = document.getElementById('dc-caption');
+    const dcCur = document.getElementById('dc-cur');
+    document.getElementById('dc-total').textContent = String(designWorks.length).padStart(2, '0');
+    const dcPad = n => String(n + 1).padStart(2, '0');
+
+    function dcRender() {
+      dcStage.innerHTML = designWorks.map((w, i) => `
+        <div class="dc-card" data-i="${i}">
+          <img class="dc-thumb" src="${w.file}" alt="${w.title}" loading="lazy">
+          <div class="dc-overlay"></div>
+          <div class="dc-num">${dcPad(i)}</div>
+          <div class="dc-zoom"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+          <div class="dc-label">${w.title} — ${w.sub}</div>
+        </div>
+      `).join('');
+      dcDots.innerHTML = designWorks.map((_, i) => `<div class="dc-dot" data-i="${i}"></div>`).join('');
+
+      dcStage.querySelectorAll('.dc-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const i = parseInt(card.dataset.i, 10);
+          if (i === dcIdx) {
+            const w = designWorks[dcIdx];
+            document.getElementById('img-lb-img').src = w.file;
+            document.getElementById('img-lb-cap').textContent = `${w.title} · ${w.sub}`;
+            imgLb.classList.add('open');
+            dcStopAuto();
+          } else { dcIdx = i; dcUpdate(); }
+        });
+      });
+      dcDots.querySelectorAll('.dc-dot').forEach(d => {
+        d.addEventListener('click', () => { dcIdx = parseInt(d.dataset.i, 10); dcUpdate(); });
+      });
+
+      dcUpdate();
+    }
+
+    function dcUpdate() {
+      const n = designWorks.length;
+      dcStage.querySelectorAll('.dc-card').forEach(card => {
+        const i = parseInt(card.dataset.i, 10);
+        let diff = i - dcIdx;
+        if (diff > n / 2) diff -= n;
+        if (diff < -n / 2) diff += n;
+        card.dataset.pos = diff;
+      });
+      dcDots.querySelectorAll('.dc-dot').forEach((d, i) => d.classList.toggle('on', i === dcIdx));
+      dcCur.textContent = dcPad(dcIdx);
+      dcCaption.style.opacity = 0;
+      setTimeout(() => {
+        dcCaption.textContent = `${designWorks[dcIdx].title} · ${designWorks[dcIdx].sub}`;
+        dcCaption.style.opacity = 1;
+      }, 150);
+    }
+
+    function dcGo(delta) {
+      dcIdx = (dcIdx + delta + designWorks.length) % designWorks.length;
+      dcUpdate();
+    }
+
+    function dcStartAuto() {
+      dcStopAuto();
+      dcAutoTimer = setInterval(() => dcGo(1), 3200);
+    }
+    function dcStopAuto() { if (dcAutoTimer) clearInterval(dcAutoTimer); }
+
+    document.getElementById('dc-prev').addEventListener('click', () => dcGo(-1));
+    document.getElementById('dc-next').addEventListener('click', () => dcGo(1));
+    dcStage.addEventListener('mouseenter', dcStopAuto);
+    dcStage.addEventListener('mouseleave', dcStartAuto);
+
+    dcRender();
+    dcStartAuto();
 
   </script>
 
