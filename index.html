@@ -1873,14 +1873,16 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
       `<div class="ed-thumb" data-i="${i}"><img src="${w.file}" alt="${w.title}" loading="lazy"></div>`
     ).join('');
 
-    function edUpdate() {
+    function edUpdate(scrollThumb = true) {
       edFrame.querySelectorAll('img').forEach(img => img.classList.toggle('on', parseInt(img.dataset.i, 10) === edIdx));
       edStrip.querySelectorAll('.ed-thumb').forEach(t => t.classList.toggle('on', parseInt(t.dataset.i, 10) === edIdx));
       document.getElementById('ed-idx').textContent = `${edPad(edIdx)} / ${edPad(designWorks.length - 1)}`;
       document.getElementById('ed-title').textContent = designWorks[edIdx].title;
       document.getElementById('ed-sub').textContent = designWorks[edIdx].sub;
-      const activeThumb = edStrip.querySelector('.ed-thumb.on');
-      if (activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      if (scrollThumb) {
+        const activeThumb = edStrip.querySelector('.ed-thumb.on');
+        if (activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
     }
     function edGo(delta) {
       edIdx = (edIdx + delta + designWorks.length) % designWorks.length;
@@ -1902,7 +1904,7 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
       imgLb.classList.add('open');
     });
 
-    edUpdate();
+    edUpdate(false);
 
   </script>
 
