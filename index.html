@@ -228,7 +228,7 @@
     .hero-cta:hover { opacity: 0.7; }
 
     /* ── HERO：景深 ── */
-    section#hero.dp{height:250vh;min-height:0;padding:0!important;display:block;overflow:visible;background:none}
+    section#hero.dp{height:175vh;min-height:0;padding:0!important;display:block;overflow:visible;background:none}
     section#hero.dp::before{display:none}
     .dh-stage{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1100px;perspective-origin:50% 45%;background:radial-gradient(ellipse at 50% 110%,#2c1e0c,#0a0908 62%)}
     .dh-plane{position:absolute;left:50%;top:50%;display:grid;gap:8px;transform-style:preserve-3d;will-change:transform}
@@ -1718,7 +1718,10 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     // 依分類重建：只放該分類的影片；數量太少時重複到能填滿窗框，再複製一份做無縫往上捲
     function wsBuild() {
       const list = activeFilter === '全部' ? wsList : wsList.filter(r => r.cat === activeFilter);
+      // 補到「欄數的整數倍」，每一排都排滿，接縫不會出現空洞
+      const cols = getComputedStyle(wsGrid).gridTemplateColumns.split(' ').length || 8;
       let unit = [...list]; while (unit.length < 32) unit = unit.concat(list);
+      for (let i = 0; unit.length % cols; i++) unit.push(list[i % list.length]);
       wsGrid.innerHTML = [...unit, ...unit].map(r => `<i data-url="${r.url}" data-cat="${r.cat}" style="background-image:url(assets/thumbs-sm/${r.code}.jpg)"></i>`).join('');
       wsCells = [...wsGrid.children]; wsLit = new Float32Array(wsCells.length); wsOff = 0; wsPos = [];
       requestAnimationFrame(() => wsMeasure());
@@ -1741,7 +1744,7 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     wsGrid.addEventListener('click', e => { const c = e.target.closest('i'); if (c) openLightbox(c, c.dataset.url); });
 
     function wsMeasure() { const g = wsGrid.getBoundingClientRect(); wsPos = wsCells.map(c => { const b = c.getBoundingClientRect(); return [b.left - g.left + b.width / 2, b.top - g.top + b.height / 2]; }); }
-    addEventListener('resize', wsMeasure); setTimeout(wsMeasure, 400); addEventListener('load', wsMeasure);
+    let wsCols = 0; addEventListener('resize', () => { const c = getComputedStyle(wsGrid).gridTemplateColumns.split(' ').length; if (c !== wsCols) { wsCols = c; wsBuild(); } else wsMeasure(); }); setTimeout(wsMeasure, 400); addEventListener('load', wsMeasure);
     let wsX = 300, wsY = 200, wsTX = 0, wsTY = 0, wsLast = 0, wsHover = false, wsPrevT = 0;
     wsBuild();
     const wsWrap = document.getElementById('wsWrap');
