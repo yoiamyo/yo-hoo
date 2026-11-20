@@ -1708,8 +1708,15 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     const WS_SKIP = new Set(['DahwPlcxePQ','DZ9kOl8RAwu','DTUlGCQk5Tp']); // 沒有封面圖
     const wsList = allReels.map(r => ({ ...r, code: r.url.match(/\/(reel|p)\/([^/?]+)/)?.[2] || '' })).filter(r => r.code && !WS_SKIP.has(r.code));
     const wsGrid = document.getElementById('wsGrid'), wsAp = document.getElementById('wsAp'), wsApT = document.getElementById('wsApT'), wsBeam = document.getElementById('wsBeam'), wsMeta = document.getElementById('wsMeta');
-    wsGrid.innerHTML = [...wsList, ...wsList].map(r => `<i data-url="${r.url}" data-cat="${r.cat}" style="background-image:url(assets/thumbs-sm/${r.code}.jpg)"></i>`).join('');
-    const wsCells = [...wsGrid.children], wsLit = new Float32Array(wsCells.length);
+    let wsCells = [], wsLit = new Float32Array(0), wsPos = [], wsOff = 0;
+    // 依分類重建：只放該分類的影片；數量太少時重複到能填滿窗框，再複製一份做無縫往上捲
+    function wsBuild() {
+      const list = activeFilter === '全部' ? wsList : wsList.filter(r => r.cat === activeFilter);
+      let unit = [...list]; while (unit.length < 32) unit = unit.concat(list);
+      wsGrid.innerHTML = [...unit, ...unit].map(r => `<i data-url="${r.url}" data-cat="${r.cat}" style="background-image:url(assets/thumbs-sm/${r.code}.jpg)"></i>`).join('');
+      wsCells = [...wsGrid.children]; wsLit = new Float32Array(wsCells.length); wsOff = 0; wsPos = [];
+      requestAnimationFrame(() => wsMeasure());
+    }
     const wsSetMeta = () => { const n = activeFilter === '全部' ? wsList.length : wsList.filter(r => r.cat === activeFilter).length; wsMeta.textContent = n + ' FILMS' + (activeFilter === '全部' ? '' : ' · ' + activeFilter); };
     wsSetMeta();
 
@@ -1722,15 +1729,15 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
       if (!btn) return;
       activeFilter = btn.dataset.cat;
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === activeFilter));
-      wsCells.forEach(c => c.classList.toggle('hl', activeFilter !== '全部' && c.dataset.cat === activeFilter));
+      wsBuild();
       wsSetMeta();
     });
     wsGrid.addEventListener('click', e => { const c = e.target.closest('i'); if (c) openLightbox(c, c.dataset.url); });
 
-    let wsPos = [];
-    const wsMeasure = () => { const g = wsGrid.getBoundingClientRect(); wsPos = wsCells.map(c => { const b = c.getBoundingClientRect(); return [b.left - g.left + b.width / 2, b.top - g.top + b.height / 2]; }); };
+    function wsMeasure() { const g = wsGrid.getBoundingClientRect(); wsPos = wsCells.map(c => { const b = c.getBoundingClientRect(); return [b.left - g.left + b.width / 2, b.top - g.top + b.height / 2]; }); }
     addEventListener('resize', wsMeasure); setTimeout(wsMeasure, 400); addEventListener('load', wsMeasure);
-    let wsX = 300, wsY = 200, wsTX = 0, wsTY = 0, wsLast = 0, wsOff = 0, wsHover = false, wsPrevT = 0;
+    let wsX = 300, wsY = 200, wsTX = 0, wsTY = 0, wsLast = 0, wsHover = false, wsPrevT = 0;
+    wsBuild();
     const wsWrap = document.getElementById('wsWrap');
     wsWrap.addEventListener('mousemove', e => { const r = wsWrap.getBoundingClientRect(); wsTX = e.clientX - r.left; wsTY = e.clientY - r.top; wsLast = performance.now(); });
     wsWrap.addEventListener('mouseleave', () => { wsLast = 0; wsHover = false; });
