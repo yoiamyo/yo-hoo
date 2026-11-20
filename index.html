@@ -435,6 +435,21 @@
     .ab-chart:hover .xh{opacity:1}
     @media(max-width:900px){.ab-cards{grid-template-columns:1fr}.ab-net{grid-row:auto}.ab-graph{min-height:340px}.ab-core{width:70px;height:70px;margin:-35px 0 0 -35px;font-size:.95rem}}
 
+    /* ── ABOUT：玻璃數據條 ── */
+    #about{border-top:none;position:relative;z-index:3}
+    .gb-band{position:relative;z-index:3;margin:-170px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    .gb{background:rgba(18,16,14,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid #2a2622;border-radius:18px;padding:1.6rem 1.6rem 1.2rem}
+    .gb-l{font-size:.72rem;letter-spacing:.15em;color:#8a8278}
+    .gb-n{font-family:var(--serif);font-weight:900;font-size:clamp(2.6rem,4vw,3.4rem);line-height:1;margin-top:.7rem;letter-spacing:-.02em;text-shadow:0 0 18px rgba(232,200,150,.25)}
+    .gb-n small{font-size:.55em}
+    .gb svg{display:block;width:100%;height:56px;margin-top:1rem;overflow:visible}
+    .gb svg .ln{fill:none;stroke:var(--gold);stroke-width:1.6;stroke-linecap:round;stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 2s cubic-bezier(.4,0,.2,1)}
+    .gb svg .ar{fill:url(#gbG);opacity:0;transition:opacity 1s 1s}
+    .gb-band.in svg .ln{stroke-dashoffset:0}.gb-band.in svg .ar{opacity:1}
+    .gb-up{font-size:.72rem;color:#7ad39a;margin-top:.6rem}
+    .gb-lead{margin-top:4.5rem}
+    @media(max-width:768px){.gb-band{grid-template-columns:1fr;margin-top:-140px}.gb-lead{margin-top:3rem}}
+
     /* ── SERVICES ── */
     .services-grid {
       display: grid;
@@ -1333,27 +1348,18 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     </div>
   </section>
 
-  <!-- ABOUT：數據 -->
+  <!-- ABOUT：玻璃數據條（往上疊在開場作品牆的尾巴） -->
   <section id="about">
-    <div class="about-grid fi">
+    <div class="gb-band" id="gbBand">
+      <div class="gb"><p class="gb-l">累積觀看</p><div class="gb-n" data-to="10" data-s="M+">0<small>M</small>+</div><svg viewBox="0 0 300 56" preserveAspectRatio="none" data-w="0"></svg><p class="gb-up">▲ 持續成長中</p></div>
+      <div class="gb"><p class="gb-l">影音製作</p><div class="gb-n" data-to="100" data-s="+">0+</div><svg viewBox="0 0 300 56" preserveAspectRatio="none" data-w="1"></svg><p class="gb-up">▲ 持續成長中</p></div>
+      <div class="gb"><p class="gb-l">品牌合作</p><div class="gb-n" data-to="20" data-s="+">0+</div><svg viewBox="0 0 300 56" preserveAspectRatio="none" data-w="2"></svg><p class="gb-up">▲ 持續成長中</p></div>
+    </div>
+    <div class="about-grid fi gb-lead">
       <p class="s-label">About</p>
       <div>
         <h2 class="ab-lead">讓每一次出現，<br>都有<em>被看見</em>的理由。</h2>
         <p class="ab-sub">以內容創作為核心的社群行銷公司</p>
-      </div>
-    </div>
-    <div class="ab-cards" id="abCards">
-      <div class="ab-card ab-net">
-        <div class="ab-top"><div><div class="stat-num" id="abN1">0+</div><div class="stat-label">品牌合作</div></div><span class="ab-live"><i></i>NETWORK</span></div>
-        <div class="ab-graph" id="abGraph"><svg id="abLines"></svg><div class="ab-core">yo-hoo</div></div>
-      </div>
-      <div class="ab-card">
-        <div class="ab-top"><div><div class="stat-num">100+</div><div class="stat-label">影音製作</div></div><span class="ab-live up">▲ 持續增加</span></div>
-        <div class="ab-chart" id="abCandle"></div>
-      </div>
-      <div class="ab-card">
-        <div class="ab-top"><div><div class="stat-num">10<span class="unit">M</span>+</div><div class="stat-label">累積觀看</div></div><span class="ab-live up">▲ 持續成長</span></div>
-        <div class="ab-chart" id="abLine"></div>
       </div>
     </div>
   </section>
@@ -2031,6 +2037,18 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     const build=()=>{['abCandle','abLine'].forEach(id=>document.getElementById(id).innerHTML='');sd=7;playC=candles();playL=line()};
     build();
     new IntersectionObserver((es,o)=>{if(es[0].isIntersecting){o.disconnect();growNet();playC();playL()}},{threshold:.25}).observe(box);
+  })();
+  </script>
+  <script>
+  // ABOUT：玻璃數據條（數字跑動＋趨勢線畫出；曲線形狀為示意，只表現成長感）
+  (function(){
+    const band=document.getElementById('gbBand');if(!band)return;
+    const W=[[.05,.08,.1,.16,.2,.3,.38,.5,.62,.78,.95],[.05,.1,.14,.2,.28,.33,.42,.55,.66,.8,.94],[.04,.06,.09,.12,.2,.28,.4,.52,.66,.82,.98]];
+    band.insertAdjacentHTML('afterbegin','<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gbG" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e8c87a" stop-opacity=".28"/><stop offset="1" stop-color="#e8c87a" stop-opacity="0"/></linearGradient></defs></svg>');
+    band.querySelectorAll('svg[data-w]').forEach(sv=>{const p=W[+sv.dataset.w],d='M'+p.map((v,i)=>(i/(p.length-1)*300).toFixed(1)+','+(56-v*56).toFixed(1)).join(' L');
+      sv.innerHTML='<path class="ar" d="'+d+' L300,56 L0,56Z"/><path class="ln" d="'+d+'"/>'});
+    new IntersectionObserver((es,o)=>{if(!es[0].isIntersecting)return;o.disconnect();band.classList.add('in');
+      band.querySelectorAll('.gb-n').forEach(n=>{const to=+n.dataset.to,suf=n.dataset.s.replace('M','<small>M</small>');let k=0;const iv=setInterval(()=>{k++;n.innerHTML=Math.round(to*k/40)+suf;if(k>=40)clearInterval(iv)},30)})},{threshold:.3}).observe(band);
   })();
   </script>
 </body>
