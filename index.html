@@ -283,20 +283,20 @@
     @media(max-width:768px){.sf-fleet{height:560px;margin:0 -1.5rem}.sf-ph{width:210px;height:440px;margin:-220px 0 0 -105px}.sf-nav.l{left:.5rem}.sf-nav.r{right:.5rem}}
 
     /* ── WORK：光圈放大＋掃描光束印樣表 ── */
-    .ws-wrap{position:relative;overflow:hidden;padding:6px 0}
-    .ws-grid{display:grid;grid-template-columns:repeat(18,1fr);gap:4px}
-    .ws-grid i{position:relative;aspect-ratio:9/16;background-size:cover;background-position:center;border-radius:2px;cursor:pointer;
+    .ws-wrap{position:relative;overflow:hidden;height:min(78vh,760px);-webkit-mask:linear-gradient(transparent,#000 9%,#000 88%,transparent);mask:linear-gradient(transparent,#000 9%,#000 88%,transparent)}
+    .ws-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;will-change:transform}
+    .ws-grid i{position:relative;aspect-ratio:9/16;background-size:cover;background-position:center;border-radius:6px;cursor:pointer;
       filter:grayscale(calc(1 - var(--l,0))) brightness(calc(.32 + var(--l,0)*.7));transform:scale(var(--s,1));z-index:var(--z,0);transition:box-shadow .3s}
     .ws-grid i.big{box-shadow:0 10px 26px rgba(0,0,0,.6)}
     .ws-grid i.hl{box-shadow:0 0 0 1.5px var(--gold)}
     .ws-beam{position:absolute;top:-10px;bottom:-10px;left:0;width:120px;margin-left:-60px;pointer-events:none;z-index:3;background:linear-gradient(90deg,transparent,rgba(232,200,122,.10) 40%,rgba(255,240,200,.35) 50%,rgba(232,200,122,.10) 60%,transparent);mix-blend-mode:screen}
     .ws-beam::after{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--gold);box-shadow:0 0 12px var(--gold)}
-    .ws-ap{position:absolute;left:0;top:0;width:260px;height:260px;margin:-130px 0 0 -130px;border-radius:50%;pointer-events:none;z-index:15;border:1px solid rgba(232,200,122,.35);box-shadow:0 0 0 1px rgba(232,200,122,.08),inset 0 0 60px rgba(232,200,122,.08)}
+    .ws-ap{position:absolute;left:0;top:0;width:340px;height:340px;margin:-170px 0 0 -170px;border-radius:50%;pointer-events:none;z-index:15;border:1px solid rgba(232,200,122,.35);box-shadow:0 0 0 1px rgba(232,200,122,.08),inset 0 0 60px rgba(232,200,122,.08)}
     .ws-ap::before{content:'';position:absolute;inset:18px;border-radius:50%;border:1px dashed rgba(232,200,122,.25);animation:wsRot 18s linear infinite}
     .ws-ap b{position:absolute;left:50%;top:-1.6rem;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:400;color:var(--gold);white-space:nowrap}
     @keyframes wsRot{to{transform:rotate(360deg)}}
     .ws-meta{display:flex;justify-content:space-between;margin-top:1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;color:var(--dim)}
-    @media(max-width:768px){.ws-grid{grid-template-columns:repeat(9,1fr)}.ws-ap{width:170px;height:170px;margin:-85px 0 0 -85px}}
+    @media(max-width:768px){.ws-grid{grid-template-columns:repeat(4,1fr);gap:6px}.ws-wrap{height:72vh}.ws-ap{width:170px;height:170px;margin:-85px 0 0 -85px}}
 
     /* ── SHARED ── */
     section { padding: 6rem 3rem; }
@@ -1708,7 +1708,7 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     const WS_SKIP = new Set(['DahwPlcxePQ','DZ9kOl8RAwu','DTUlGCQk5Tp']); // 沒有封面圖
     const wsList = allReels.map(r => ({ ...r, code: r.url.match(/\/(reel|p)\/([^/?]+)/)?.[2] || '' })).filter(r => r.code && !WS_SKIP.has(r.code));
     const wsGrid = document.getElementById('wsGrid'), wsAp = document.getElementById('wsAp'), wsApT = document.getElementById('wsApT'), wsBeam = document.getElementById('wsBeam'), wsMeta = document.getElementById('wsMeta');
-    wsGrid.innerHTML = wsList.map(r => `<i data-url="${r.url}" data-cat="${r.cat}" style="background-image:url(assets/thumbs-sm/${r.code}.jpg)"></i>`).join('');
+    wsGrid.innerHTML = [...wsList, ...wsList].map(r => `<i data-url="${r.url}" data-cat="${r.cat}" style="background-image:url(assets/thumbs-sm/${r.code}.jpg)"></i>`).join('');
     const wsCells = [...wsGrid.children], wsLit = new Float32Array(wsCells.length);
     const wsSetMeta = () => { const n = activeFilter === '全部' ? wsList.length : wsList.filter(r => r.cat === activeFilter).length; wsMeta.textContent = n + ' FILMS' + (activeFilter === '全部' ? '' : ' · ' + activeFilter); };
     wsSetMeta();
@@ -1730,27 +1730,33 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     let wsPos = [];
     const wsMeasure = () => { const g = wsGrid.getBoundingClientRect(); wsPos = wsCells.map(c => { const b = c.getBoundingClientRect(); return [b.left - g.left + b.width / 2, b.top - g.top + b.height / 2]; }); };
     addEventListener('resize', wsMeasure); setTimeout(wsMeasure, 400); addEventListener('load', wsMeasure);
-    let wsX = 300, wsY = 200, wsTX = 0, wsTY = 0, wsLast = 0;
+    let wsX = 300, wsY = 200, wsTX = 0, wsTY = 0, wsLast = 0, wsOff = 0, wsHover = false, wsPrevT = 0;
     const wsWrap = document.getElementById('wsWrap');
-    wsWrap.addEventListener('mousemove', e => { const r = wsGrid.getBoundingClientRect(); wsTX = e.clientX - r.left; wsTY = e.clientY - r.top; wsLast = performance.now(); });
-    wsWrap.addEventListener('mouseleave', () => { wsLast = 0; });
+    wsWrap.addEventListener('mousemove', e => { const r = wsWrap.getBoundingClientRect(); wsTX = e.clientX - r.left; wsTY = e.clientY - r.top; wsLast = performance.now(); });
+    wsWrap.addEventListener('mouseleave', () => { wsLast = 0; wsHover = false; });
+    wsWrap.addEventListener('mouseenter', () => { wsHover = true; });
     (function wsLoop(t) {
       requestAnimationFrame(wsLoop);
       const vr = wsGrid.getBoundingClientRect(); if (vr.bottom < 0 || vr.top > innerHeight) return;
       if (!wsPos.length) wsMeasure();
-      const W = wsGrid.clientWidth, H = wsGrid.clientHeight, idle = performance.now() - wsLast > 1800;
+      const dt = Math.min(50, t - (wsPrevT || t)); wsPrevT = t;
+      const half = wsGrid.scrollHeight / 2;
+      if (!wsHover) wsOff = (wsOff + dt * .022) % half;          // 慢慢往上捲，滑鼠移進來就停
+      wsGrid.style.transform = `translateY(${-wsOff}px)`;
+      const W = wsWrap.clientWidth, H = wsWrap.clientHeight, idle = performance.now() - wsLast > 1800;
       const gx = idle ? W * (.5 + .38 * Math.sin(t / 5200)) : wsTX, gy = idle ? H * (.5 + .34 * Math.sin(t / 3700 + 1)) : wsTY;
       wsX += (gx - wsX) * (idle ? .03 : .25); wsY += (gy - wsY) * (idle ? .03 : .25);
-      wsAp.style.transform = `translate(${wsX}px,${wsY + 6}px)`;
+      wsAp.style.transform = `translate(${wsX}px,${wsY}px)`;
       const R = wsAp.offsetWidth / 2;
       wsApT.textContent = `f/${(1.4 + Math.abs(Math.sin(t / 2000)) * 1.4).toFixed(1)} · 50mm`;
       const ph = (t / 11000) % 2, bx = (ph < 1 ? ph : 2 - ph) * (W + 120) - 60; wsBeam.style.left = bx + 'px';
       wsCells.forEach((c, i) => {
-        const [px, py] = wsPos[i];
+        const px = wsPos[i][0], py = wsPos[i][1] - wsOff;
+        if (py < -200 || py > H + 200) return;
         if (Math.abs(px - bx) < 30) wsLit[i] = 1; wsLit[i] *= .985;
         const a = Math.min(1, Math.max(0, 1.25 - Math.hypot(px - wsX, py - wsY) / (R * 1.15)));
         c.style.setProperty('--l', Math.max(a, wsLit[i]).toFixed(2));
-        c.style.setProperty('--s', (1 + a * .32).toFixed(3));
+        c.style.setProperty('--s', (1 + a * .12).toFixed(3));
         c.style.setProperty('--z', a > .05 ? Math.round(a * 10) : 0);
         c.classList.toggle('big', a > .4);
       });
