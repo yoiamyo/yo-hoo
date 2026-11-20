@@ -29,10 +29,13 @@
       el.innerHTML = `<img src="${src}" alt="" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">` +
         (blurs[i] ? `<img src="${blurs[i]}" alt="" decoding="async" style="position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;opacity:0">` : '');
       box.appendChild(el);
+      let sx = (gx - .5) * W * 1.25 * sp + (Math.random() - .5) * 60;
+      let sy = (gy - .5) * H * 1.2 * sp + (Math.random() - .5) * 60;
+      // 讓出畫面中間放標題的區域（手機版畫面窄，不讓卡片壓在字上）
+      if (opt.clearCenter && Math.abs(sy) < H * opt.clearCenter && Math.abs(sx) < W * .45 && z > -900) sy += (sy < 0 ? -1 : 1) * H * opt.clearCenter;
       return {
         el, bl: el.children[1], z, lb: -1, lz: '', lo: '', lt: '',
-        sx: (gx - .5) * W * 1.25 * sp + (Math.random() - .5) * 60,
-        sy: (gy - .5) * H * 1.2 * sp + (Math.random() - .5) * 60,
+        sx, sy,
         rx: (Math.random() - .5) * 40, ry: (Math.random() - .5) * 50, rz: (Math.random() - .5) * 24,
       };
     });

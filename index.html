@@ -260,7 +260,7 @@
     .dh-hud b{color:var(--gold)}
     .dh-corner{position:absolute;right:2.4rem;top:5.5rem;z-index:6;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#999;text-align:right;line-height:1.8;pointer-events:none}
     .dh-corner i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff3b3b;margin-right:.4rem;animation:dhbk 1.2s steps(1) infinite}@keyframes dhbk{50%{opacity:0}}
-    @media(max-width:860px){.dh-hud{left:1.25rem;bottom:1.25rem}.dh-scale{width:150px}.dh-corner{right:1.25rem;top:4.5rem}}
+    @media(max-width:860px){.dh-desk{display:none}.dh-h h1{font-size:2.6rem;text-shadow:0 6px 30px #000,0 0 60px #000}.dh-hud{left:1.25rem;bottom:1.25rem}.dh-scale{width:150px}.dh-corner{right:1.25rem;top:4.5rem}}
 
     /* ── SOCIAL：手機陣列（各帳號真實九宮格） ── */
     .sf-fleet{position:relative;height:680px;perspective:1600px;overflow:hidden;margin:0 -3rem}
@@ -448,7 +448,7 @@
     .gb-band.in svg .ln{stroke-dashoffset:0}.gb-band.in svg .ar{opacity:1}
     .gb-up{font-size:.72rem;color:#7ad39a;margin-top:.6rem}
     .gb-lead{margin-top:4.5rem}
-    @media(max-width:768px){.gb-band{grid-template-columns:1fr;margin-top:-140px}.gb-lead{margin-top:3rem}}
+    @media(max-width:768px){.gb-band{gap:.5rem;margin-top:-120px}.gb{padding:.9rem .75rem .8rem;border-radius:12px}.gb-l{font-size:.6rem;letter-spacing:.08em}.gb-n{font-size:1.55rem;margin-top:.45rem}.gb svg{height:30px;margin-top:.6rem}.gb-up{font-size:.58rem;margin-top:.4rem}}
 
     /* ── SERVICES ── */
     .services-grid {
@@ -1339,7 +1339,7 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
   <section id="hero" class="dp">
     <div class="dh-stage" id="dhStage">
       
-      <div class="dh-h" id="dhH"><p class="dh-label">唷呼有限公司 · Creative Studio</p><h1>Content in<br><i>every dimension.</i></h1><p class="dh-hint">MOVE MOUSE UP / DOWN TO FOCUS · SCROLL DOWN</p></div>
+      <div class="dh-h" id="dhH"><p class="dh-label">唷呼有限公司 · Creative Studio</p><h1>Content in<br><i>every dimension.</i></h1><p class="dh-hint"><span class="dh-desk">MOVE MOUSE UP / DOWN TO FOCUS · </span>SCROLL DOWN</p></div>
       <div class="dh-shade" id="dhShade"></div>
       <div class="dh-end" id="dhEnd"><p class="dh-eb">SHORT-FORM VIDEO · SOCIAL MARKETING · DESIGN</p><h2>We make people<br><i>stop scrolling.</i></h2><p class="dh-sub">讓每一支影片，都有被看見的理由。</p>
         <div class="dh-chips"><a href="#work"><b>01</b>影音製作</a><a href="#social"><b>02</b>社群行銷</a><a href="#design"><b>03</b>平面設計</a></div></div>
@@ -1951,17 +1951,17 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
   (function(){
     const IDS='C06VW40S0PV C0joq8YMCN4 C1rwzWvSJpU C4cHY6CPRSv C62sSGsvqgY C6c7_zgvmut C6NlGYsvKrF Ct-sg47poOS CtIk4XEpiSm Cv6apwYg8om CvlsgJ-gB4T CwJvb3typat CzjGW3QykeL DaAmTxoJIi7 DadCWo9prfb DaF0QK9ScaD DaF3-7mSaM8 DaF9gAzyMVt DaFqND3yD7Y DaFuwZzyNU6 DaFWum1SoxJ DaGAk9Wy6mX DaGEmNkydi1 DaGJ8r2SrYm DaGLcKmy2ao DaGMr4fSofb DaGMSrTSfRG DaiGVmojcjk DakbEn4hsQz DanEeL0ppqO DapVd5Ytf2M DasbieutNha Dauf_2uhxXU Dbdg-OFhKwQ DbGCjt1StLp DbKVRGDjaSq DbVpqpoyF_Y DbXy_UDDtbF DcD2dPqhvaq DE37O0hBIcz DECd9dIypZx DEpc1LZhVUa DEq866VBhWs DGAEzZJzEzA DGAj_xRzX6- DH5lrlIh9mE DHioPCZSFhb DHIVr9ps50P DHTLMQ_zU1M DINi-5RxLSu DJwQCPMTt5H DKmHzGQhFR_ DLc35eXSOzb DLcjUj2y9M4 DLctQXEydNS DLcuUojSCVI DLnRbbQyNbU DLtXEp5yflD DLwDelvyiIS DLzaez_R5BR DMZ-rlhBsrm DNw2UPV5vR3 DO5oBzogZag DOJDdRZCQBu DP0X8kukruF DPBWbEAk_JV DPeAQHBAZBk DPTXmV0E0oI DQbpK6FCTr0 DQEWJwhE0gl DQHDJHdk1Ea DQRk9keE1WB DQW3msWCRcD DQYnrl_gVJV DRedoDsiSFM DRKRsM_gZoa DRt5itYgYA6 DRwka62AY4M DSEZlYtlgFK DShlVnrAZsL DSPyY8mAc6y DTPInongYU5 DTPuPneE9ld DUezSHQgVcs DUvTrFtEcR_ DUX8d7sga2r DV-605vD9kG DV-z86vCTb2 DVdbKtZAbG7 DVf5-_UCedF DVifINrifOJ DVpkaA1EysG DVvv0IwiRrz DWGiUhMS5b0 DWOXgZvp_7W DWYc7OkCb3L DX_jqDKDLig DXBOHMKCWXs DXbxvEPk6Qi DXg3l8vk8rs DXME3SiJAJ6 DXRiN_sjKCb DY12KgLjx3W DY4VKY_JCFI DY6JhQLJ5xP DYOnJa9mvnF DYQ9vaPiaWZ DYt5_DtSa_7 DZFPgBJE1pO DZhnpm9BsK-'.split(' ');
     const dp=document.getElementById('hero'),stage=document.getElementById('dhStage'),h=document.getElementById('dhH'),hud=document.getElementById('dhHud'),nd=document.getElementById('dhNd'),fd=document.getElementById('dhFd'),tc=document.getElementById('dhTc');
-    const mob=innerWidth<860,N=mob?42:84;
+    const mob=innerWidth<860,N=mob?60:84;
     const WC=mob?5:9;                                   // 聚攏後作品牆的欄數
     const big=mob?innerWidth/3.3:innerWidth/6.2;        // 聚攏後每張的寬度（卡片本體就做這麼大）
-    const small=mob?Math.min(innerWidth*.13,58):Math.min(innerWidth*.062,96);
+    const small=mob?Math.min(innerWidth*.16,70):Math.min(innerWidth*.062,96);
     const tw=big,th=tw*1.25,gap=mob?10:16,ANG=-8*Math.PI/180,ca=Math.cos(ANG),sa=Math.sin(ANG);
     const WR=Math.ceil(N/WC);
     const srcs=Array.from({length:N},(_,i)=>'assets/thumbs-md/'+IDS[(i*7)%IDS.length]+'.jpg');
     const blurs=srcs.map(x=>x.replace('thumbs-md','thumbs-blur'));
     const shade=document.getElementById('dhShade'),end=document.getElementById('dhEnd');
     const pd=n=>String(n).padStart(2,'0');let f=0;
-    createDepth({stage,scrollEl:dp,srcs,blurs,tw,scatterScale:small/big,endAt:.62,
+    createDepth({stage,scrollEl:dp,srcs,blurs,tw,scatterScale:small/big,endAt:.62,clearCenter:mob?.17:0,
       target:(i,t,c)=>{const col=i%WC,row=i/WC|0,x0=(col-(WC-1)/2)*(tw+gap),y0=(row-(WR-1)/2)*(th+gap);
         return{x:x0*ca-y0*sa,y:x0*sa+y0*ca-c.H*.05,z:0,rz:-8,s:1}},
       onFrame:(p,e,F,t)=>{
