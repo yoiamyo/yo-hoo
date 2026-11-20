@@ -228,7 +228,7 @@
     .hero-cta:hover { opacity: 0.7; }
 
     /* ── HERO：景深 ── */
-    section#hero.dp{height:420vh;min-height:0;padding:0!important;display:block;overflow:visible;background:none}
+    section#hero.dp{height:250vh;min-height:0;padding:0!important;display:block;overflow:visible;background:none}
     section#hero.dp::before{display:none}
     .dh-stage{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1100px;perspective-origin:50% 45%;background:radial-gradient(ellipse at 50% 110%,#2c1e0c,#0a0908 62%)}
     .dh-plane{position:absolute;left:50%;top:50%;display:grid;gap:8px;transform-style:preserve-3d;will-change:transform}
@@ -1946,13 +1946,13 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     const blurs=srcs.map(x=>x.replace('thumbs-md','thumbs-blur'));
     const shade=document.getElementById('dhShade'),end=document.getElementById('dhEnd');
     const pd=n=>String(n).padStart(2,'0');let f=0;
-    createDepth({stage,scrollEl:dp,srcs,blurs,tw,scatterScale:small/big,
+    createDepth({stage,scrollEl:dp,srcs,blurs,tw,scatterScale:small/big,endAt:.62,
       target:(i,t,c)=>{const col=i%WC,row=i/WC|0,x0=(col-(WC-1)/2)*(tw+gap),y0=(row-(WR-1)/2)*(th+gap);
         return{x:x0*ca-y0*sa,y:x0*sa+y0*ca-c.H*.05,z:0,rz:-8,s:1}},
       onFrame:(p,e,F,t)=>{
         h.style.opacity=Math.max(0,1-p*4);h.style.transform='scale('+(1+p*.6)+')';
-        shade.style.opacity=(Math.max(0,(p-.55)/.3)).toFixed(3);
-        const q=Math.max(0,Math.min(1,(p-.74)/.16));end.style.opacity=q;end.style.transform='translateY('+((1-q)*24)+'px)';end.classList.toggle('on',q>.5);
+        shade.style.opacity=(Math.max(0,(p-.42)/.25)).toFixed(3);
+        const q=Math.max(0,Math.min(1,(p-.58)/.16));end.style.opacity=q;end.style.transform='translateY('+((1-q)*24)+'px)';end.classList.toggle('on',q>.5);
         hud.style.opacity=Math.max(0,1-p*2);
         const fn=(F+1600)/2250;nd.style.left=Math.min(1,Math.max(0,fn))*100+'%';fd.textContent=(0.6+(1-fn)*6).toFixed(1)+'m';
         f++;const sec=Math.floor(t/1000);tc.textContent='00:'+pd(sec/60|0)+':'+pd(sec%60)+':'+pd(f%24)}});
