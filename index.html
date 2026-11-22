@@ -298,6 +298,26 @@
     .ws-meta{display:flex;justify-content:space-between;margin-top:1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;color:var(--dim)}
     @media(max-width:768px){.ws-grid{grid-template-columns:repeat(4,1fr);gap:6px}.ws-wrap{height:72vh}.ws-ap{width:170px;height:170px;margin:-85px 0 0 -85px}}
 
+    /* ── HERO：作品牆（A 首映版） ── */
+    section#hero.ph{position:relative;height:100vh;min-height:640px;padding:0!important;overflow:hidden;display:block;background:#0a0808}
+    section#hero.ph::before{display:none}
+    .ph-wall{position:absolute;inset:-12% -6%;display:grid;grid-template-columns:repeat(var(--cols,7),1fr);gap:12px;transform:rotate(-8deg) scale(1.15)}
+    .ph-wall .col{display:flex;flex-direction:column;gap:12px;animation:phUp 60s linear infinite;will-change:transform}
+    .ph-wall .col:nth-child(even){animation-name:phDown}
+    .ph-wall img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:6px;filter:grayscale(.25) brightness(.78);display:block}
+    @keyframes phUp{to{transform:translateY(-50%)}}@keyframes phDown{from{transform:translateY(-50%)}to{transform:none}}
+    .ph-shade{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(10,9,8,.5),rgba(10,9,8,.93) 75%)}
+    .ph-c{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 1.25rem}
+    .ph-eb{font-size:.72rem;letter-spacing:.4em;color:var(--gold)}
+    .ph-c h1{font-family:var(--serif);font-weight:900;font-size:clamp(3rem,9vw,8.5rem);line-height:.95;letter-spacing:-.02em;margin:1.4rem 0}
+    .ph-c h1 i{color:var(--gold)}
+    .ph-sub{color:#bbb;letter-spacing:.06em}
+    .ph-chips{display:flex;gap:.6rem;margin-top:2.2rem;flex-wrap:wrap;justify-content:center}
+    .ph-chips a{padding:.8rem 1.4rem;border-radius:999px;border:1px solid #3a352f;background:rgba(20,18,16,.6);backdrop-filter:blur(6px);font-size:.85rem;transition:.25s}
+    .ph-chips a:hover{border-color:var(--gold);color:var(--gold)}
+    .ph-chips a b{color:var(--gold);margin-right:.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem}
+    @media(max-width:768px){.ph-eb{letter-spacing:.2em;font-size:.62rem}.ph-wall{--cols:4!important}}
+
     /* ── SHARED ── */
     section { padding: 6rem 3rem; }
 
@@ -437,7 +457,7 @@
 
     /* ── ABOUT：玻璃數據條 ── */
     #about{border-top:none;position:relative;z-index:3;padding-bottom:3rem}
-    .gb-band{position:relative;z-index:3;margin:-170px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    .gb-band{position:relative;z-index:3;margin:-110px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
     .gb{background:rgba(18,16,14,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid #2a2622;border-radius:18px;padding:1.6rem 1.6rem 1.2rem}
     .gb-l{font-size:.72rem;letter-spacing:.15em;color:#8a8278}
     .gb-n{font-family:var(--serif);font-weight:900;font-size:clamp(2.6rem,4vw,3.4rem);line-height:1;margin-top:.7rem;letter-spacing:-.02em;text-shadow:0 0 18px rgba(232,200,150,.25)}
@@ -1335,16 +1355,14 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     </ul>
   </nav>
 
-  <!-- HERO：景深 -->
-  <section id="hero" class="dp">
-    <div class="dh-stage" id="dhStage">
-      
-      <div class="dh-h" id="dhH"><p class="dh-label">唷呼有限公司 · Creative Studio</p><h1>Content in<br><i>every dimension.</i></h1><p class="dh-hint"><span class="dh-desk">MOVE MOUSE UP / DOWN TO FOCUS · </span>SCROLL DOWN</p></div>
-      <div class="dh-shade" id="dhShade"></div>
-      <div class="dh-end" id="dhEnd"><p class="dh-eb">SHORT-FORM VIDEO · SOCIAL MARKETING · DESIGN</p><h2>We make people<br><i>stop scrolling.</i></h2><p class="dh-sub">讓每一支影片，都有被看見的理由。</p>
-        <div class="dh-chips"><a href="#work"><b>01</b>影音製作</a><a href="#social"><b>02</b>社群行銷</a><a href="#design"><b>03</b>平面設計</a></div></div>
-      <div class="dh-hud" id="dhHud">FOCUS <b id="dhFd">2.4m</b> · f/1.4 · 50mm<div class="dh-scale"><div class="dh-needle" id="dhNd"></div></div></div>
-      <div class="dh-corner"><i></i>REC<br><span id="dhTc">00:00:00:00</span></div>
+  <!-- HERO：作品牆（A 首映版） -->
+  <section id="hero" class="ph">
+    <div class="ph-wall" id="phWall"></div><div class="ph-shade"></div>
+    <div class="ph-c">
+      <p class="ph-eb">SHORT-FORM VIDEO · SOCIAL MARKETING · DESIGN</p>
+      <h1>We make people<br><i>stop scrolling.</i></h1>
+      <p class="ph-sub">讓每一支影片，都有被看見的理由。</p>
+      <div class="ph-chips"><a href="#work"><b>01</b>影音製作</a><a href="#social"><b>02</b>社群行銷</a><a href="#design"><b>03</b>平面設計</a></div>
     </div>
   </section>
 
@@ -1945,32 +1963,13 @@ footer { flex-direction: column; gap: 0.75rem; text-align: center; }
 
   </script>
 
-  <script src="assets/depth-engine.js"></script>
   <script>
-  // HERO：景深（作品卡散落在不同深度，滑鼠上下＝對焦，往下滑收成作品牆）— 用 assets/depth-engine.js（效能版）
+  // HERO：作品牆（A 首映版）— 七欄作品一上一下慢慢流動
   (function(){
-    const IDS='C06VW40S0PV C0joq8YMCN4 C1rwzWvSJpU C4cHY6CPRSv C62sSGsvqgY C6c7_zgvmut C6NlGYsvKrF Ct-sg47poOS CtIk4XEpiSm Cv6apwYg8om CvlsgJ-gB4T CwJvb3typat CzjGW3QykeL DaAmTxoJIi7 DadCWo9prfb DaF0QK9ScaD DaF3-7mSaM8 DaF9gAzyMVt DaFqND3yD7Y DaFuwZzyNU6 DaFWum1SoxJ DaGAk9Wy6mX DaGEmNkydi1 DaGJ8r2SrYm DaGLcKmy2ao DaGMr4fSofb DaGMSrTSfRG DaiGVmojcjk DakbEn4hsQz DanEeL0ppqO DapVd5Ytf2M DasbieutNha Dauf_2uhxXU Dbdg-OFhKwQ DbGCjt1StLp DbKVRGDjaSq DbVpqpoyF_Y DbXy_UDDtbF DcD2dPqhvaq DE37O0hBIcz DECd9dIypZx DEpc1LZhVUa DEq866VBhWs DGAEzZJzEzA DGAj_xRzX6- DH5lrlIh9mE DHioPCZSFhb DHIVr9ps50P DHTLMQ_zU1M DINi-5RxLSu DJwQCPMTt5H DKmHzGQhFR_ DLc35eXSOzb DLcjUj2y9M4 DLctQXEydNS DLcuUojSCVI DLnRbbQyNbU DLtXEp5yflD DLwDelvyiIS DLzaez_R5BR DMZ-rlhBsrm DNw2UPV5vR3 DO5oBzogZag DOJDdRZCQBu DP0X8kukruF DPBWbEAk_JV DPeAQHBAZBk DPTXmV0E0oI DQbpK6FCTr0 DQEWJwhE0gl DQHDJHdk1Ea DQRk9keE1WB DQW3msWCRcD DQYnrl_gVJV DRedoDsiSFM DRKRsM_gZoa DRt5itYgYA6 DRwka62AY4M DSEZlYtlgFK DShlVnrAZsL DSPyY8mAc6y DTPInongYU5 DTPuPneE9ld DUezSHQgVcs DUvTrFtEcR_ DUX8d7sga2r DV-605vD9kG DV-z86vCTb2 DVdbKtZAbG7 DVf5-_UCedF DVifINrifOJ DVpkaA1EysG DVvv0IwiRrz DWGiUhMS5b0 DWOXgZvp_7W DWYc7OkCb3L DX_jqDKDLig DXBOHMKCWXs DXbxvEPk6Qi DXg3l8vk8rs DXME3SiJAJ6 DXRiN_sjKCb DY12KgLjx3W DY4VKY_JCFI DY6JhQLJ5xP DYOnJa9mvnF DYQ9vaPiaWZ DYt5_DtSa_7 DZFPgBJE1pO DZhnpm9BsK-'.split(' ');
-    const dp=document.getElementById('hero'),stage=document.getElementById('dhStage'),h=document.getElementById('dhH'),hud=document.getElementById('dhHud'),nd=document.getElementById('dhNd'),fd=document.getElementById('dhFd'),tc=document.getElementById('dhTc');
-    const mob=innerWidth<860,N=mob?60:84;
-    const WC=mob?5:9;                                   // 聚攏後作品牆的欄數
-    const big=mob?innerWidth/3.3:innerWidth/6.2;        // 聚攏後每張的寬度（卡片本體就做這麼大）
-    const small=mob?Math.min(innerWidth*.16,70):Math.min(innerWidth*.062,96);
-    const tw=big,th=tw*1.25,gap=mob?10:16,ANG=-8*Math.PI/180,ca=Math.cos(ANG),sa=Math.sin(ANG);
-    const WR=Math.ceil(N/WC);
-    const srcs=Array.from({length:N},(_,i)=>'assets/thumbs-md/'+IDS[(i*7)%IDS.length]+'.jpg');
-    const blurs=srcs.map(x=>x.replace('thumbs-md','thumbs-blur'));
-    const shade=document.getElementById('dhShade'),end=document.getElementById('dhEnd');
-    const pd=n=>String(n).padStart(2,'0');let f=0;
-    createDepth({stage,scrollEl:dp,srcs,blurs,tw,scatterScale:small/big,endAt:.62,clearCenter:mob?.17:0,
-      target:(i,t,c)=>{const col=i%WC,row=i/WC|0,x0=(col-(WC-1)/2)*(tw+gap),y0=(row-(WR-1)/2)*(th+gap);
-        return{x:x0*ca-y0*sa,y:x0*sa+y0*ca-c.H*.05,z:0,rz:-8,s:1}},
-      onFrame:(p,e,F,t)=>{
-        h.style.opacity=Math.max(0,1-p*4);h.style.transform='scale('+(1+p*.6)+')';
-        shade.style.opacity=(Math.max(0,(p-.42)/.25)).toFixed(3);
-        const q=Math.max(0,Math.min(1,(p-.58)/.16));end.style.opacity=q;end.style.transform='translateY('+((1-q)*24)+'px)';end.classList.toggle('on',q>.5);
-        hud.style.opacity=Math.max(0,1-p*2);
-        const fn=(F+1600)/2250;nd.style.left=Math.min(1,Math.max(0,fn))*100+'%';fd.textContent=(0.6+(1-fn)*6).toFixed(1)+'m';
-        f++;const sec=Math.floor(t/1000);tc.textContent='00:'+pd(sec/60|0)+':'+pd(sec%60)+':'+pd(f%24)}});
+    const IDS='C06VW40S0PV C0joq8YMCN4 C1rwzWvSJpU C4cHY6CPRSv C62sSGsvqgY C6c7_zgvmut C6NlGYsvKrF Ct-sg47poOS CtIk4XEpiSm Cv6apwYg8om CvlsgJ-gB4T CwJvb3typat CzjGW3QykeL DaAmTxoJIi7 DadCWo9prfb DaF0QK9ScaD DaF3-7mSaM8 DaF9gAzyMVt DaFqND3yD7Y DaFuwZzyNU6 DaFWum1SoxJ DaGAk9Wy6mX DaGEmNkydi1 DaGJ8r2SrYm DaGLcKmy2ao DaGMr4fSofb DaGMSrTSfRG DaiGVmojcjk DakbEn4hsQz DanEeL0ppqO DapVd5Ytf2M DasbieutNha Dauf_2uhxXU Dbdg-OFhKwQ DbGCjt1StLp DbKVRGDjaSq DbVpqpoyF_Y DbXy_UDDtbF DcD2dPqhvaq DE37O0hBIcz DECd9dIypZx DEpc1LZhVUa DEq866VBhWs DGAEzZJzEzA DGAj_xRzX6- DH5lrlIh9mE DHioPCZSFhb DHIVr9ps50P DHTLMQ_zU1M DINi-5RxLSu DJwQCPMTt5H DKmHzGQhFR_ DLc35eXSOzb DLcjUj2y9M4 DLctQXEydNS DLcuUojSCVI DLnRbbQyNbU DLtXEp5yflD DLwDelvyiIS DLzaez_R5BR DMZ-rlhBsrm DNw2UPV5vR3 DO5oBzogZag DOJDdRZCQBu DP0X8kukruF DPBWbEAk_JV DPeAQHBAZBk DPTXmV0E0oI DQbpK6FCTr0 DQEWJwhE0gl DQHDJHdk1Ea DQRk9keE1WB DQW3msWCRcD DQYnrl_gVJV DRedoDsiSFM DRKRsM_gZoa DRt5itYgYA6 DRwka62AY4M DSEZlYtlgFK DShlVnrAZsL DSPyY8mAc6y DTPInongYU5 DTPuPneE9ld DUezSHQgVcs DUvTrFtEcR_ DUX8d7sga2r DV-605vD9kG DV-z86vCTb2 DVdbKtZAbG7 DVf5-_UCedF DVifINrifOJ DVpkaA1EysG DVvv0IwiRrz DWGiUhMS5b0 DWOXgZvp_7W DWYc7OkCb3L DX_jqDKDLig DXBOHMKCWXs DXbxvEPk6Qi DXg3l8vk8rs DXME3SiJAJ6 DXRiN_sjKCb DY12KgLjx3W DY4VKY_JCFI DY6JhQLJ5xP DYOnJa9mvnF DYQ9vaPiaWZ DYt5_DtSa_7 DZFPgBJE1pO DZhnpm9BsK-'.split(' '),el=document.getElementById('phWall'),cols=innerWidth<768?4:7;
+    el.style.setProperty('--cols',cols);
+    el.innerHTML=Array.from({length:cols},(_,c)=>{const imgs=Array.from({length:6},(_,i)=>'assets/thumbs-md/'+IDS[(c*5+i)%IDS.length]+'.jpg');
+      return '<div class="col" style="animation-duration:'+(45+c*7)+'s">'+[...imgs,...imgs].map(s=>'<img src="'+s+'" alt="" decoding="async">').join('')+'</div>'}).join('');
   })();
   </script>
   <script>
